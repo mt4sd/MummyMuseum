@@ -1,0 +1,1 @@
+Init mummy_museum README.
