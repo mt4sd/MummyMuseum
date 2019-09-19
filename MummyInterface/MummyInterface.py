@@ -16,18 +16,14 @@ class MummyInterface(ScriptedLoadableModule):
   def __init__(self, parent):
     ScriptedLoadableModule.__init__(self, parent)
     self.parent.title = "MummyInterface" # TODO make this more human readable by adding spaces
-    self.parent.categories = ["Museum"]
+    self.parent.categories = ["Slicelet"]
     self.parent.dependencies = []
     self.parent.contributors = ["Nayra, Guillermo, Carlos Luque"] # replace with "Firstname Lastname (Organization)"
-    self.parent.helpText = """
-This is an example of scripted loadable module bundled in an extension.
-It performs a simple thresholding on the input volume and optionally captures a screenshot.
-"""
-    self.parent.helpText += self.getDefaultModuleDocumentationLink()
-    self.parent.acknowledgementText = """
-This file was originally developed by Jean-Christophe Fillion-Robin, Kitware Inc.
-and Steve Pieper, Isomics, Inc. and was partially funded by NIH grant 3P41RR013218-12S1.
-""" # replace with organization, grant and thanks.
+    self.parent.helpText = "Slicelet for Mummy Museam"
+    self.parent.acknowledgementText = "This file was originally developed by Nayra, Guillermo, Carlos Luque " 
+
+    #iconPath = os.path.join(os.path.dirname(self.parent.path), 'Resources/Icons', self.moduleName+'.png')
+    #parent.icon = qt.QIcon(iconPath)
 
 #
 # MummyInterfaceWidget
@@ -43,67 +39,38 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
 
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
-    self.logic = MummyInterfaceLogic()
-
-    # Load widget from .ui file (created by Qt Designer)
-    uiWidget = slicer.util.loadUI(self.resourcePath('UI/MummyInterface.ui'))
-    self.layout.addWidget(uiWidget)
-    self.ui = slicer.util.childWidgetVariables(uiWidget)
-
-
-    # connections
-    self.ui.applyButton.connect('clicked()', self.onApplyButton)
-
+    
+     # Show slicelet button
+    showSliceletButton = qt.QPushButton("Show slicelet")
+    showSliceletButton.toolTip = "Launch the slicelet"
+    self.layout.addWidget(qt.QLabel(' '))
+    self.layout.addWidget(showSliceletButton)
+    showSliceletButton.connect('clicked()', self.launchSlicelet)
+    
     # Add vertical spacer
     self.layout.addStretch(1)
 
-    slicer.util.mainWindow().setWindowTitle("Mummies")
-    self.isSingleModuleShown = False
-    self.showSingleModule(True)
 
+  def launchSlicelet(self):
+    mainFrame = SliceletMainFrame()
+    mainFrame.minimumWidth = 1200
+    mainFrame.minimumHeight = 720
+    mainFrame.windowTitle = "Mummy Museam"
+    mainFrame.setWindowFlags(qt.Qt.WindowCloseButtonHint | qt.Qt.WindowMaximizeButtonHint | qt.Qt.WindowTitleHint)
+    #iconPath = os.path.join(os.path.dirname(slicer.modules.geldosimetryanalysis.path), 'Resources/Icons', self.moduleName+'.png')
+    #mainFrame.windowIcon = qt.QIcon(iconPath)
+    mainFrame.connect('destroyed()', self.onSliceletClosed)
 
-  def cleanup(self):
-    pass
+    slicelet = MummyMuseamSlicelet(mainFrame)
+    mainFrame.setSlicelet(slicelet)
 
-  def onApplyButton(self):
-    pass
+    # Make the slicelet reachable from the Slicer python interactor for testing
+    slicer.MummyMuseamSliceletInstance = slicelet
 
-  def showSingleModule(self, singleModule=True, toggle=False):
+    return slicelet
 
-    if toggle:
-      singleModule = not self.isSingleModuleShown
-
-    self.isSingleModuleShown = singleModule
-
-    if singleModule:
-      # We hide all toolbars, etc. which is inconvenient as a default startup setting,
-      # therefore disable saving of window setup.
-      import qt
-      settings = qt.QSettings()
-      settings.setValue('MainWindow/RestoreGeometry', 'false')
-
-    for toolbar in slicer.util.mainWindow().findChildren('QToolBar'):
-      toolbar.setVisible(False)
-
-
-#
-
-#
-# MummyInterfaceLogic
-#
-
-class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
-  """This class should implement all the actual
-  computation done by your module.  The interface
-  should be such that other python code can import
-  this class and make use of the functionality without
-  requiring an instance of the Widget.
-  Uses ScriptedLoadableModuleLogic base class, available at:
-  https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
-  """
-  def todo(self):
-    pass
- 
+  def onSliceletClosed(self):
+    logging.debug('Slicelet closed')
 
 
 class MummyInterfaceTest(ScriptedLoadableModuleTest):
@@ -124,3 +91,95 @@ class MummyInterfaceTest(ScriptedLoadableModuleTest):
     self.setUp()
     self.test_MummyInterface1()
 
+
+#
+# MummyInterfaceLogic
+#
+
+class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
+  """This class should implement all the actual
+  computation done by your module.  The interface
+  should be such that other python code can import
+  this class and make use of the functionality without
+  requiring an instance of the Widget.
+  Uses ScriptedLoadableModuleLogic base class, available at:
+  https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
+  """
+  def todo(self):
+    pass
+
+
+
+#
+# SliceletMainFrame
+#   Handles the event when the slicelet is hidden (its window closed)
+#
+class SliceletMainFrame(qt.QDialog):
+  def setSlicelet(self, slicelet):
+    self.slicelet = slicelet
+
+  def hideEvent(self, event):
+    self.slicelet.disconnect()
+
+    import gc
+    refs = gc.get_referrers(self.slicelet)
+    if len(refs) > 1:
+      # logging.debug('Stuck slicelet references (' + repr(len(refs)) + '):\n' + repr(refs))
+      pass
+
+    slicer.MummyInterfaceSliceletInstance = None
+    self.slicelet = None
+    self.deleteLater()
+
+#
+# MummyMuseamSlicelet
+#
+
+class MummyMuseamSlicelet():
+  def __init__(self, FrameParent):
+
+    self.frameParent = FrameParent
+    self.frameParent.setLayout(qt.QVBoxLayout())
+
+    self.layout = self.frameParent.layout()
+    self.layout.setMargin(0)
+    self.layout.setSpacing(0)
+
+    uiPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/UI', 'MummyInterface.ui')
+
+    # Load widget from .ui file (created by Qt Designer)
+    uiWidget = slicer.util.loadUI(uiPath)
+    self.layout.addWidget(uiWidget)
+    self.ui = slicer.util.childWidgetVariables(uiWidget)
+
+
+    # Add layout widget
+    self.layoutWidget = slicer.qMRMLLayoutWidget()
+    self.layoutWidget.setMRMLScene(slicer.mrmlScene)
+    self.frameParent.layout().addWidget(self.layoutWidget)
+    self.layoutWidget.setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUp3DView)
+    
+    self.threeDWidget = self.layoutWidget.layoutManager().threeDWidget(0)
+    self.threeDWidget.threeDController().setVisible(False)
+
+    self.threeDView = self.threeDWidget.threeDView()
+
+    self.frameParent.show()
+
+# Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
+  def disconnect(self):
+    pass #TODO
+
+#
+# Main
+#
+if __name__ == "__main__":
+  #TODO: access and parse command line arguments
+  #   Example: SlicerRt/src/BatchProcessing
+  #   Ideally handle --xml
+
+  import sys
+  logging.debug( sys.argv )
+
+  mainFrame = qt.QFrame()
+  slicelet = MummyMuseamSlicelet(mainFrame)
