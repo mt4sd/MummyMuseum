@@ -53,11 +53,8 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
 
   def launchSlicelet(self):
     mainFrame = SliceletMainFrame()
-    mainFrame.minimumWidth = 1200
-    mainFrame.minimumHeight = 720
-    mainFrame.windowTitle = "Mummy Museam"
-    mainFrame.setWindowFlags(qt.Qt.WindowCloseButtonHint | qt.Qt.WindowMaximizeButtonHint | qt.Qt.WindowTitleHint)
-    #iconPath = os.path.join(os.path.dirname(slicer.modules.geldosimetryanalysis.path), 'Resources/Icons', self.moduleName+'.png')
+
+    #iconPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/Icons', self.moduleName+'.png')
     #mainFrame.windowIcon = qt.QIcon(iconPath)
     mainFrame.connect('destroyed()', self.onSliceletClosed)
 
@@ -137,6 +134,12 @@ class SliceletMainFrame(qt.QDialog):
 
 class MummyMuseamSlicelet():
   def __init__(self, FrameParent):
+
+
+    FrameParent.minimumWidth = 1200
+    FrameParent.minimumHeight = 720
+    FrameParent.windowTitle = "Mummy Museam"
+    FrameParent.setWindowFlags(qt.Qt.WindowCloseButtonHint | qt.Qt.WindowMaximizeButtonHint | qt.Qt.WindowTitleHint)  
 
     self.frameParent = FrameParent
     self.frameParent.setLayout(qt.QVBoxLayout())
