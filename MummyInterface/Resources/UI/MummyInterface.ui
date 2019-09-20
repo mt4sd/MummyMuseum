@@ -6,189 +6,46 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>554</width>
-    <height>810</height>
+    <width>538</width>
+    <height>148</height>
    </rect>
   </property>
-  <widget class="QWidget" name="row1" native="true">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>321</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <widget class="QPushButton" name="mummyButton2">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>20</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Momia2</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="mummyButton3">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>20</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Momia3</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="mummyButton1">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>20</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Run the algorithm.</string>
-    </property>
-    <property name="text">
-     <string>Momia1</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QWidget" name="row2" native="true">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>100</y>
-     <width>321</width>
-     <height>80</height>
-    </rect>
-   </property>
-   <widget class="QPushButton" name="viewButtonA">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>0</y>
-      <width>51</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Frontal</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="viewButtonL">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>0</y>
-      <width>51</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Izquierda</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="viewButtonR">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>40</y>
-      <width>51</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Derecha</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="viewButtonI">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>40</y>
-      <width>51</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Inferior</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="viewButtonS">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>0</y>
-      <width>51</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Superior</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="viewButtonP">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>40</y>
-      <width>51</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Trasera</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QWidget" name="row3" native="true">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>200</y>
-     <width>311</width>
-     <height>80</height>
-    </rect>
-   </property>
-   <widget class="QPushButton" name="volumeRenderingButtonB">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>20</y>
-      <width>75</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Interior</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="volumeRenderingButtonA">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>20</y>
-      <width>75</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Exterior</string>
-    </property>
-   </widget>
-  </widget>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="1" column="0">
+    <widget class="QPushButton" name="mummyButton1">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="toolTip">
+      <string>Run the algorithm.</string>
+     </property>
+     <property name="text">
+      <string>Momia1</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="mummyButton2">
+     <property name="text">
+      <string>Momia2</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QPushButton" name="viewSButton">
+     <property name="text">
+      <string>Superior</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="viewIButton">
+     <property name="text">
+      <string>Inferior</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
