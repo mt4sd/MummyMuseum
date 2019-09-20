@@ -160,6 +160,9 @@ class MummyMuseamSlicelet():
 
     self.threeDView = self.threeDWidget.threeDView()
 
+    # set up background color, box, label axis
+    self.setup3DView()
+
     #Full screen
     self.frameParent.showFullScreen() 
     self.frameParent.show()
@@ -172,6 +175,19 @@ class MummyMuseamSlicelet():
 # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
     pass #TODO write all disconnects
+
+  def setup3DView(self):
+    BG_TOP = 0.05, 0.05, 0.05
+    BG_BTM = 0.36, 0.25, 0.2
+    BG_BAR = 0.93, 0.53, 0.2
+
+    viewNode = self.threeDWidget.mrmlViewNode()
+
+    viewNode.SetBoxVisible(False)
+    viewNode.SetAxisLabelsVisible(False)
+    viewNode.SetBackgroundColor(BG_TOP)
+    viewNode.SetBackgroundColor2(BG_BTM)
+
 
 #
 # Main
