@@ -189,10 +189,12 @@ class MummyMuseamSlicelet():
     bg_btm = 0.36, 0.25, 0.2
    
     viewNode = self.threeDWidget.mrmlViewNode()
-    viewNode.SetBoxVisible(True)
-    viewNode.SetAxisLabelsVisible(True)
+    viewNode.SetBoxVisible(False)
+    viewNode.SetAxisLabelsVisible(False)
     viewNode.SetBackgroundColor(bg_top)
     viewNode.SetBackgroundColor2(bg_btm)
+
+    self.threeDView.resetFocalPoint()
     self.threeDView.resetCamera()
 
   def onLoadMummy1(self):
@@ -206,6 +208,8 @@ class MummyMuseamSlicelet():
       volumenNode = slicer.util.getNode('CT-Chest')
       displayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumenNode)
       displayNode.SetVisibility(True)
+
+    self.setup3DView()
 
   def onViewSClicked(self):
     self.threeDView.resetCamera()
