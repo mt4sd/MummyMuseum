@@ -134,13 +134,7 @@ class SliceletMainFrame(qt.QDialog):
 
 class MummyMuseamSlicelet():
   def __init__(self, FrameParent):
-
-
-    FrameParent.minimumWidth = 1200
-    FrameParent.minimumHeight = 720
-    FrameParent.windowTitle = "Mummy Museam"
-    FrameParent.setWindowFlags(qt.Qt.WindowCloseButtonHint | qt.Qt.WindowMaximizeButtonHint | qt.Qt.WindowTitleHint)  
-
+   
     self.frameParent = FrameParent
     self.frameParent.setLayout(qt.QVBoxLayout())
 
@@ -155,7 +149,6 @@ class MummyMuseamSlicelet():
     self.layout.addWidget(uiWidget)
     self.ui = slicer.util.childWidgetVariables(uiWidget)
 
-
     # Add layout widget
     self.layoutWidget = slicer.qMRMLLayoutWidget()
     self.layoutWidget.setMRMLScene(slicer.mrmlScene)
@@ -167,11 +160,18 @@ class MummyMuseamSlicelet():
 
     self.threeDView = self.threeDWidget.threeDView()
 
+    #Full screen
+    self.frameParent.showFullScreen() 
     self.frameParent.show()
+
+
+# TODO write all connections (action)
+  def setupConnections(self):
+    logging.debug('Slicelet.setupConnections()')
 
 # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
-    pass #TODO
+    pass #TODO write all disconnects
 
 #
 # Main
