@@ -177,16 +177,14 @@ class MummyMuseamSlicelet():
     pass #TODO write all disconnects
 
   def setup3DView(self):
-    BG_TOP = 0.05, 0.05, 0.05
-    BG_BTM = 0.36, 0.25, 0.2
-    BG_BAR = 0.93, 0.53, 0.2
-
+    bg_top = 0.05, 0.05, 0.05
+    bg_btm = 0.36, 0.25, 0.2
+   
     viewNode = self.threeDWidget.mrmlViewNode()
-
     viewNode.SetBoxVisible(False)
     viewNode.SetAxisLabelsVisible(False)
-    viewNode.SetBackgroundColor(BG_TOP)
-    viewNode.SetBackgroundColor2(BG_BTM)
+    viewNode.SetBackgroundColor(bg_top)
+    viewNode.SetBackgroundColor2(bg_btm)
 
 
 #
