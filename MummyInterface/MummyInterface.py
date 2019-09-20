@@ -175,19 +175,22 @@ class MummyMuseamSlicelet():
   def setupConnections(self):
     logging.debug('Slicelet.setupConnections()')
     self.ui.mummyButton1.connect('clicked()', self.onLoadMummy1)
+    self.ui.viewSButton.connect("clicked()", self.onViewSClicked)
+    self.ui.viewIButton.connect("clicked()", self.onViewIClicked)
 
 # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
-    pass #TODO write all disconnects
     self.ui.mummyButton1.disconnect('clicked()', self.onLoadMummy1)
+    self.ui.viewSButton.disconnect("clicked()", self.onViewSClicked)
+    self.ui.viewIButton.disconnect("clicked()", self.onViewIClicked)
 
   def setup3DView(self):
     bg_top = 0.05, 0.05, 0.05
     bg_btm = 0.36, 0.25, 0.2
    
     viewNode = self.threeDWidget.mrmlViewNode()
-    viewNode.SetBoxVisible(False)
-    viewNode.SetAxisLabelsVisible(False)
+    viewNode.SetBoxVisible(True)
+    viewNode.SetAxisLabelsVisible(True)
     viewNode.SetBackgroundColor(bg_top)
     viewNode.SetBackgroundColor2(bg_btm)
     self.threeDView.resetCamera()
@@ -204,7 +207,18 @@ class MummyMuseamSlicelet():
       displayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumenNode)
       displayNode.SetVisibility(True)
 
+  def onViewSClicked(self):
+    self.threeDView.resetCamera()
+    s_Axis = 5
+    self.threeDView.rotateToViewAxis(s_Axis)
 
+
+  def onViewIClicked(self):
+    self.threeDView.resetCamera()
+    i_Axis = 4
+    self.threeDView.rotateToViewAxis(i_Axis)
+
+    
 #
 # Main
 #
