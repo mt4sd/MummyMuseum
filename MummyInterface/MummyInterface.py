@@ -159,9 +159,12 @@ class MummyMuseamSlicelet():
     self.threeDWidget.threeDController().setVisible(False)
 
     self.threeDView = self.threeDWidget.threeDView()
+    self.volRenLogic = slicer.modules.volumerendering.logic()
 
     # set up background color, box, label axis
     self.setup3DView()
+
+    self.setupConnections()
 
     #Full screen
     self.frameParent.showFullScreen() 
@@ -171,10 +174,12 @@ class MummyMuseamSlicelet():
 # TODO write all connections (action)
   def setupConnections(self):
     logging.debug('Slicelet.setupConnections()')
+    self.ui.mummyButton1.connect('clicked()', self.onLoadMummy1)
 
 # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
     pass #TODO write all disconnects
+    self.ui.mummyButton1.disconnect('clicked()', self.onLoadMummy1)
 
   def setup3DView(self):
     bg_top = 0.05, 0.05, 0.05
@@ -185,6 +190,19 @@ class MummyMuseamSlicelet():
     viewNode.SetAxisLabelsVisible(False)
     viewNode.SetBackgroundColor(bg_top)
     viewNode.SetBackgroundColor2(bg_btm)
+    self.threeDView.resetCamera()
+
+  def onLoadMummy1(self):
+    logging.debug('Slicelet.onLoadMummy1()')
+    slicer.mrmlScene.Clear(0)
+    volumenPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/data', "CT-Chest.nrrd")
+
+    loadedVolumeNode = slicer.util.loadVolume(volumenPath)
+
+    if loadedVolumeNode:
+      volumenNode = slicer.util.getNode('CT-Chest')
+      displayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumenNode)
+      displayNode.SetVisibility(True)
 
 
 #
