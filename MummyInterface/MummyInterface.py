@@ -163,7 +163,10 @@ class MummyMuseamSlicelet():
     self.threeDWidget.threeDController().setVisible(False)
 
     self.threeDView = self.threeDWidget.threeDView()
+
+    # Set up the Volumen rendering
     self.volRenLogic = slicer.modules.volumerendering.logic()
+    self.setupCustomPreset()
 
     # set up background color, box, label axis
     self.setup3DView()
@@ -228,8 +231,10 @@ class MummyMuseamSlicelet():
 
     if loadedVolumeNode:
       volumenNode = slicer.util.getNode(CTName)
+      # Create if there are several vtkMRMLVolumeRenderingDisplayNode nodes
       displayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumenNode)
       displayNode.SetVisibility(True)
+      displayNode.GetVolumePropertyNode().Copy(self.volRenLogic.GetPresetByName('volumeRenderingA'))
 
     self.setup3DView()
 
@@ -262,7 +267,25 @@ class MummyMuseamSlicelet():
   def onViewSClicked(self):
     self.setViewAxis('S-axis')
 
+  def setupCustomPreset(self):
     
+    presetsScenePath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/VolRen/MyPresets.mrml')
+
+    # Read presets scene
+    customPresetsScene = slicer.vtkMRMLScene()
+    vrPropNode = slicer.vtkMRMLVolumePropertyNode()
+    customPresetsScene.RegisterNodeClass(vrPropNode)
+    customPresetsScene.SetURL(presetsScenePath)
+    customPresetsScene.Connect()
+
+    # Add presets to volume rendering logic
+    presetsScene = self.volRenLogic.GetPresetsScene()
+    vrNodes = customPresetsScene.GetNodesByClass("vtkMRMLVolumePropertyNode")
+    vrNodes.UnRegister(None)
+    for itemNum in range(vrNodes.GetNumberOfItems()):
+      node = vrNodes.GetItemAsObject(itemNum)
+      self.volRenLogic.AddPreset(node)
+
 #
 # Main
 #
