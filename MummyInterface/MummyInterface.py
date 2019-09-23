@@ -182,6 +182,10 @@ class MummyMuseamSlicelet():
     self.ui.mummyButton2.connect('clicked()', self.onLoadMummy2)
     self.ui.viewButtonS.connect("clicked()", self.onViewSClicked)
     self.ui.viewButtonI.connect("clicked()", self.onViewIClicked)
+    self.ui.viewButtonA.connect("clicked()", self.onViewAClicked)
+    self.ui.viewButtonP.connect("clicked()", self.onViewPClicked)
+    self.ui.viewButtonL.connect("clicked()", self.onViewLClicked)
+    self.ui.viewButtonR.connect("clicked()", self.onViewRClicked)
 
 # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
@@ -189,6 +193,10 @@ class MummyMuseamSlicelet():
     self.ui.mummyButton2.disconnect('clicked()', self.onLoadMummy2)
     self.ui.viewButtonS.disconnect("clicked()", self.onViewSClicked)
     self.ui.viewButtonI.disconnect("clicked()", self.onViewIClicked)
+    self.ui.viewButtonA.disconnect("clicked()", self.onViewAClicked)
+    self.ui.viewButtonP.disconnect("clicked()", self.onViewPClicked)
+    self.ui.viewButtonL.disconnect("clicked()", self.onViewLClicked)
+    self.ui.viewButtonR.disconnect("clicked()", self.onViewRClicked)
 
   def setup3DView(self):
     bg_top = 0.05, 0.05, 0.05
