@@ -220,17 +220,26 @@ class MummyMuseamSlicelet():
       displayNode.SetVisibility(True)
 
     self.setup3DView()
+  
 
-  def onViewSClicked(self):
+  def getViewAxisIndex(viewAxis):
+    axis_index = {'L-axis' : 0, 'R-axis' : 1,  \
+                  'P-axis' : 2, 'A-axis' : 3,  \
+                  'I-axis' : 4, 'S-axis' : 5}
+    return axis_index[viewAxis]
+
+
+  def setViewAxis(viewAxis):
     self.threeDView.resetCamera()
-    s_Axis = 5
-    self.threeDView.rotateToViewAxis(s_Axis)
-
+    self.threeDView.rotateToViewAxis(getViewAxisIndex(viewAxis))
+    
 
   def onViewIClicked(self):
-    self.threeDView.resetCamera()
-    i_Axis = 4
-    self.threeDView.rotateToViewAxis(i_Axis)
+    self.setViewAxis('I-axis')
+
+
+  def onViewSClicked(self):
+    self.setViewAxis('S-axis')
 
     
 #
