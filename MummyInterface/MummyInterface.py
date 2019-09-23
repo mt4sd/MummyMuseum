@@ -133,6 +133,10 @@ class SliceletMainFrame(qt.QDialog):
 #
 
 class MummyMuseamSlicelet():
+  viewAxisIndex = {'L-axis' : 0, 'R-axis' : 1,  \
+                   'P-axis' : 2, 'A-axis' : 3,  \
+                   'I-axis' : 4, 'S-axis' : 5}
+
   def __init__(self, FrameParent):
    
     self.frameParent = FrameParent
@@ -220,17 +224,11 @@ class MummyMuseamSlicelet():
       displayNode.SetVisibility(True)
 
     self.setup3DView()
-  
-  def getViewAxisIndex(self, viewAxis):
-    axis_index = {'L-axis' : 0, 'R-axis' : 1,  \
-                  'P-axis' : 2, 'A-axis' : 3,  \
-                  'I-axis' : 4, 'S-axis' : 5}
-    return axis_index[viewAxis]
 
 
   def setViewAxis(self, viewAxis):
     self.threeDView.resetCamera()
-    self.threeDView.rotateToViewAxis(self.getViewAxisIndex(viewAxis))
+    self.threeDView.rotateToViewAxis(self.viewAxisIndex[viewAxis])
     
 
   def onViewLClicked(self):
