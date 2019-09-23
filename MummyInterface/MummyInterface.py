@@ -234,6 +234,22 @@ class MummyMuseamSlicelet():
     self.threeDView.rotateToViewAxis(getViewAxisIndex(viewAxis))
     
 
+  def onViewLClicked(self):
+    self.setViewAxis('L-axis')
+
+
+  def onViewRClicked(self):
+    self.setViewAxis('R-axis')
+
+
+  def onViewPClicked(self):
+    self.setViewAxis('P-axis')
+
+
+  def onViewAClicked(self):
+    self.setViewAxis('A-axis')
+
+
   def onViewIClicked(self):
     self.setViewAxis('I-axis')
 
