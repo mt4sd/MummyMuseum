@@ -176,15 +176,15 @@ class MummyMuseamSlicelet():
     logging.debug('Slicelet.setupConnections()')
     self.ui.mummyButton1.connect('clicked()', self.onLoadMummy1)
     self.ui.mummyButton2.connect('clicked()', self.onLoadMummy2)
-    self.ui.viewSButton.connect("clicked()", self.onViewSClicked)
-    self.ui.viewIButton.connect("clicked()", self.onViewIClicked)
+    self.ui.viewButtonS.connect("clicked()", self.onViewSClicked)
+    self.ui.viewButtonI.connect("clicked()", self.onViewIClicked)
 
 # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
     self.ui.mummyButton1.disconnect('clicked()', self.onLoadMummy1)
     self.ui.mummyButton2.disconnect('clicked()', self.onLoadMummy2)
-    self.ui.viewSButton.disconnect("clicked()", self.onViewSClicked)
-    self.ui.viewIButton.disconnect("clicked()", self.onViewIClicked)
+    self.ui.viewButtonS.disconnect("clicked()", self.onViewSClicked)
+    self.ui.viewButtonI.disconnect("clicked()", self.onViewIClicked)
 
   def setup3DView(self):
     bg_top = 0.05, 0.05, 0.05
@@ -221,17 +221,16 @@ class MummyMuseamSlicelet():
 
     self.setup3DView()
   
-
-  def getViewAxisIndex(viewAxis):
+  def getViewAxisIndex(self, viewAxis):
     axis_index = {'L-axis' : 0, 'R-axis' : 1,  \
                   'P-axis' : 2, 'A-axis' : 3,  \
                   'I-axis' : 4, 'S-axis' : 5}
     return axis_index[viewAxis]
 
 
-  def setViewAxis(viewAxis):
+  def setViewAxis(self, viewAxis):
     self.threeDView.resetCamera()
-    self.threeDView.rotateToViewAxis(getViewAxisIndex(viewAxis))
+    self.threeDView.rotateToViewAxis(self.getViewAxisIndex(viewAxis))
     
 
   def onViewLClicked(self):
