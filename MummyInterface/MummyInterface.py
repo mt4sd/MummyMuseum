@@ -175,12 +175,14 @@ class MummyMuseamSlicelet():
   def setupConnections(self):
     logging.debug('Slicelet.setupConnections()')
     self.ui.mummyButton1.connect('clicked()', self.onLoadMummy1)
+    self.ui.mummyButton2.connect('clicked()', self.onLoadMummy2)
     self.ui.viewSButton.connect("clicked()", self.onViewSClicked)
     self.ui.viewIButton.connect("clicked()", self.onViewIClicked)
 
 # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
     self.ui.mummyButton1.disconnect('clicked()', self.onLoadMummy1)
+    self.ui.mummyButton2.disconnect('clicked()', self.onLoadMummy2)
     self.ui.viewSButton.disconnect("clicked()", self.onViewSClicked)
     self.ui.viewIButton.disconnect("clicked()", self.onViewIClicked)
 
@@ -199,13 +201,21 @@ class MummyMuseamSlicelet():
 
   def onLoadMummy1(self):
     logging.debug('Slicelet.onLoadMummy1()')
+    self.onLoadMummyX('CT-Chest.nrrd', 'CT-Chest')
+
+  def onLoadMummy2(self):
+    logging.debug('Slicelet.onLoadMummy2()')
+    self.onLoadMummyX('CTA-cardio.nrrd', 'CTA-cardio')
+
+  def onLoadMummyX(self, CTdata, CTName):
+    logging.debug('Slicelet.onLoadMummyX()')
     slicer.mrmlScene.Clear(0)
-    volumenPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/data', "CT-Chest.nrrd")
+    volumenPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/data', CTdata)
 
     loadedVolumeNode = slicer.util.loadVolume(volumenPath)
 
     if loadedVolumeNode:
-      volumenNode = slicer.util.getNode('CT-Chest')
+      volumenNode = slicer.util.getNode(CTName)
       displayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumenNode)
       displayNode.SetVisibility(True)
 
