@@ -7,26 +7,118 @@
     <x>0</x>
     <y>0</y>
     <width>512</width>
-    <height>315</height>
+    <height>755</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
-   <item>
-    <widget class="QPushButton" name="mummyButton3">
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="7" column="1">
+    <widget class="QPushButton" name="viewButtonP">
      <property name="text">
-      <string>Momia3</string>
+      <string>Trasera</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="8" column="0" colspan="3">
+    <widget class="Line" name="spacerLine2">
+     <property name="windowModality">
+      <enum>Qt::ApplicationModal</enum>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>100</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QLabel" name="labelRow2">
+     <property name="text">
+      <string>Seleccione la vista:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="labelRow1">
+     <property name="text">
+      <string>Seleccione la momia que desee consultar:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <spacer name="spacer1">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="11" column="2">
+    <widget class="QPushButton" name="volumeRenderingBButton">
+     <property name="text">
+      <string>Interior</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QPushButton" name="viewButtonL">
+     <property name="text">
+      <string>Izquierda</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QPushButton" name="viewButtonA">
+     <property name="text">
+      <string>Frontal</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0">
+    <widget class="QPushButton" name="volumeRenderingAButton">
+     <property name="text">
+      <string>Exterior</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QPushButton" name="viewButtonS">
+     <property name="text">
+      <string>Superior</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <widget class="QPushButton" name="viewButtonR">
+     <property name="text">
+      <string>Derecha</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QPushButton" name="mummyButton1">
+     <property name="text">
+      <string>Momia1</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
     <widget class="QPushButton" name="mummyButton2">
      <property name="text">
       <string>Momia2</string>
      </property>
     </widget>
    </item>
-   <item>
-    <widget class="QPushButton" name="mummyButton1">
+   <item row="2" column="2">
+    <widget class="QPushButton" name="mummyButton3">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -34,9 +126,49 @@
       <string>Run the algorithm.</string>
      </property>
      <property name="text">
-      <string>Momia1</string>
+      <string>Momia3</string>
      </property>
     </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QPushButton" name="viewButtonI">
+     <property name="text">
+      <string>Inferior</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="3">
+    <widget class="Line" name="spacerLine1">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>100</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="2">
+    <widget class="QLabel" name="labelRow3">
+     <property name="text">
+      <string>Mostrar el exterior de la momia o el interior de la misma:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <spacer name="spacer2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
