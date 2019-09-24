@@ -221,22 +221,24 @@ class MummyMuseamSlicelet():
   def onLoadMummy1(self):
     logging.debug('Slicelet.onLoadMummy1()')
 
-    CT_name = 'CT-Chest'
-    if CT_name == self.currentMummyName:
+    dataFilename = 'CT-Chest.nrrd'
+    mummyName = 'CT-Chest'
+    if mummyName == self.currentMummyName:  # Avoid unnecesary load of the current mummy
       return
 
-    self.onLoadMummyX('CT-Chest.nrrd', CT_name)
+    self.onLoadMummyX(dataFilename, mummyName)
 
   def onLoadMummy2(self):
     logging.debug('Slicelet.onLoadMummy2()')
 
-    CT_name = 'CTA-cardio'
-    if CT_name == self.currentMummyName:
+    dataFilename = 'CTA-cardio.nrrd'
+    mummyName = 'CTA-cardio'
+    if mummyName == self.currentMummyName:  # Avoid unnecesary load of the current mummy
       return
 
-    self.onLoadMummyX('CTA-cardio.nrrd', CT_name)
+    self.onLoadMummyX(dataFilename, mummyName)
 
-  def onLoadMummyX(self, CTdata, CTName):
+  def onLoadMummyX(self, dataFilename, mummyName):
     logging.debug('Slicelet.onLoadMummyX()')
 
     # clean all generated node in mrml
@@ -244,22 +246,22 @@ class MummyMuseamSlicelet():
     self.setup3DView()
     self.currentMummyName = ''
 
-    volumenPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/data', CTdata)
+    volumenPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/data', dataFilename)
     loadedVolumeNode = slicer.util.loadVolume(volumenPath)
 
     if loadedVolumeNode:
-      volumeNode = slicer.util.getNode(CTName)
+      volumeNode = slicer.util.getNode(mummyName)
       if volumeNode:
-        self.currentMummyName = CTName
+        self.currentMummyName = mummyName
         # Create all nodes and associated with VolumeNode
         displayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumeNode)
         # Copy the presert to a current displayNode
         displayNode.GetVolumePropertyNode().Copy(self.volRenLogic.GetPresetByName('volumeRenderingA'))
         displayNode.SetVisibility(True)
       else:
-        logging.debug('Slicelet.onLoadMummyX(): No found the mummy node' + CTName)
+        logging.debug('Slicelet.onLoadMummyX(): No found the mummy node' + mummyName)
     else:
-        logging.debug('Slicelet.onLoadMummyX(): No load the mummy' + CTName)
+        logging.debug('Slicelet.onLoadMummyX(): No load the mummy' + mummyName)
 
     self.setup3DView()
 
