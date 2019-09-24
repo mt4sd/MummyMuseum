@@ -221,8 +221,8 @@ class MummyMuseamSlicelet():
   def onLoadMummy1(self):
     logging.debug('Slicelet.onLoadMummy1()')
 
-    dataFilename = 'CT-Chest.nrrd'
-    mummyName = 'CT-Chest'
+    mummyName = 'Mummy1'
+    dataFilename = 'Mummy1.nrrd'
     if mummyName == self.currentMummyName:  # Avoid unnecesary load of the current mummy
       return
 
@@ -231,8 +231,8 @@ class MummyMuseamSlicelet():
   def onLoadMummy2(self):
     logging.debug('Slicelet.onLoadMummy2()')
 
-    dataFilename = 'CTA-cardio.nrrd'
-    mummyName = 'CTA-cardio'
+    mummyName = 'Mummy2'
+    dataFilename = 'Mummy2.nrrd'
     if mummyName == self.currentMummyName:  # Avoid unnecesary load of the current mummy
       return
 
