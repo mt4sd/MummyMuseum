@@ -138,6 +138,8 @@ class MummyMuseamSlicelet():
                    'I-axis' : 4, 'S-axis' : 5}
 
   def __init__(self, FrameParent):
+
+    self.currentMummyName = ""
    
     self.frameParent = FrameParent
     self.frameParent.setLayout(qt.QVBoxLayout())
@@ -178,7 +180,7 @@ class MummyMuseamSlicelet():
     self.frameParent.show()
 
 
-# TODO write all connections (action)
+
   def setupConnections(self):
     logging.debug('Slicelet.setupConnections()')
     self.ui.mummyButton1.connect('clicked()', self.onLoadMummy1)
@@ -189,6 +191,8 @@ class MummyMuseamSlicelet():
     self.ui.viewButtonP.connect("clicked()", self.onViewPClicked)
     self.ui.viewButtonL.connect("clicked()", self.onViewLClicked)
     self.ui.viewButtonR.connect("clicked()", self.onViewRClicked)
+    self.ui.volumeRenderingAButton.connect("clicked()", self.onOutsidePreset)
+    self.ui.volumeRenderingBButton.connect("clicked()", self.onInsidePreset)
 
 # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
@@ -200,6 +204,8 @@ class MummyMuseamSlicelet():
     self.ui.viewButtonP.disconnect("clicked()", self.onViewPClicked)
     self.ui.viewButtonL.disconnect("clicked()", self.onViewLClicked)
     self.ui.viewButtonR.disconnect("clicked()", self.onViewRClicked)
+    self.ui.volumeRenderingAButton.connect("clicked()", self.onOutsidePreset)
+    self.ui.volumeRenderingBButton.connect("clicked()", self.onInsidePreset)
 
   def setup3DView(self):
     bg_top = 0.05, 0.05, 0.05
@@ -224,17 +230,27 @@ class MummyMuseamSlicelet():
 
   def onLoadMummyX(self, CTdata, CTName):
     logging.debug('Slicelet.onLoadMummyX()')
-    slicer.mrmlScene.Clear(0)
-    volumenPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/data', CTdata)
 
+    # clean all generated node in mrml
+    slicer.mrmlScene.Clear(0)
+    self.currentMummyName = ''
+
+    volumenPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/data', CTdata)
     loadedVolumeNode = slicer.util.loadVolume(volumenPath)
 
     if loadedVolumeNode:
-      volumenNode = slicer.util.getNode(CTName)
-      # Create if there are several vtkMRMLVolumeRenderingDisplayNode nodes
-      displayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumenNode)
-      displayNode.SetVisibility(True)
-      displayNode.GetVolumePropertyNode().Copy(self.volRenLogic.GetPresetByName('volumeRenderingA'))
+      volumeNode = slicer.util.getNode(CTName)
+      if volumeNode:
+        self.currentMummyName = CTName
+        # Create all nodes and associated with VolumeNode
+        displayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumeNode)
+        # Copy the presert to a current displayNode
+        displayNode.GetVolumePropertyNode().Copy(self.volRenLogic.GetPresetByName('volumeRenderingA'))
+        displayNode.SetVisibility(True)
+      else:
+        logging.debug('Slicelet.onLoadMummyX(): No found the mummy node' + CTName)
+    else:
+        logging.debug('Slicelet.onLoadMummyX(): No load the mummy' + CTName)
 
     self.setup3DView()
 
@@ -285,6 +301,26 @@ class MummyMuseamSlicelet():
     for itemNum in range(vrNodes.GetNumberOfItems()):
       node = vrNodes.GetItemAsObject(itemNum)
       self.volRenLogic.AddPreset(node)
+
+  def onOutsidePreset(self):
+    if self.currentMummyName:
+      self.activatePreset('volumeRenderingA')
+      self.setup3DView
+
+  def onInsidePreset(self):
+    if self.currentMummyName:
+      self.activatePreset('volumeRenderingB')
+      self.setup3DView
+
+  def activatePreset(self, PresetName):
+    volumeNode = slicer.util.getNode(self.currentMummyName)
+    if volumeNode:
+      # Get the (Volumen Rendering) display node associated with the volume node
+      displayNode = self.volRenLogic.GetFirstVolumeRenderingDisplayNode(volumeNode)
+      # Copy the presert to a current displayNode
+      displayNode.GetVolumePropertyNode().Copy(self.volRenLogic.GetPresetByName(PresetName))
+    else:
+      logging.debug('Slicelet.activatePreset(): No found the mummy node' + self.currentMummyName)
 
 #
 # Main
