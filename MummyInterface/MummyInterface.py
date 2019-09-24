@@ -222,17 +222,28 @@ class MummyMuseamSlicelet():
 
   def onLoadMummy1(self):
     logging.debug('Slicelet.onLoadMummy1()')
-    self.onLoadMummyX('CT-Chest.nrrd', 'CT-Chest')
+
+    CT_name = 'CT-Chest'
+    if CT_name == self.currentMummyName:
+      return
+
+    self.onLoadMummyX('CT-Chest.nrrd', CT_name)
 
   def onLoadMummy2(self):
     logging.debug('Slicelet.onLoadMummy2()')
-    self.onLoadMummyX('CTA-cardio.nrrd', 'CTA-cardio')
+
+    CT_name = 'CTA-cardio'
+    if CT_name == self.currentMummyName:
+      return
+
+    self.onLoadMummyX('CTA-cardio.nrrd', CT_name)
 
   def onLoadMummyX(self, CTdata, CTName):
     logging.debug('Slicelet.onLoadMummyX()')
 
     # clean all generated node in mrml
     slicer.mrmlScene.Clear(0)
+    self.setup3DView()
     self.currentMummyName = ''
 
     volumenPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/data', CTdata)
