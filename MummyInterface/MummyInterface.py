@@ -179,8 +179,6 @@ class MummyMuseamSlicelet():
     self.frameParent.showFullScreen() 
     self.frameParent.show()
 
-
-
   def setupConnections(self):
     logging.debug('Slicelet.setupConnections()')
     self.ui.mummyButton1.connect('clicked()', self.onLoadMummy1)
@@ -265,31 +263,24 @@ class MummyMuseamSlicelet():
 
     self.setup3DView()
 
-
   def setViewAxis(self, viewAxis):
     self.threeDView.resetCamera()
     self.threeDView.rotateToViewAxis(self.viewAxisIndex[viewAxis])
-    
 
   def onViewLClicked(self):
     self.setViewAxis('L-axis')
 
-
   def onViewRClicked(self):
     self.setViewAxis('R-axis')
-
 
   def onViewPClicked(self):
     self.setViewAxis('P-axis')
 
-
   def onViewAClicked(self):
     self.setViewAxis('A-axis')
 
-
   def onViewIClicked(self):
     self.setViewAxis('I-axis')
-
 
   def onViewSClicked(self):
     self.setViewAxis('S-axis')
