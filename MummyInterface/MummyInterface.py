@@ -306,7 +306,6 @@ class MummyMuseamSlicelet():
     customPresetsScene.Connect()
 
     # Add presets to volume rendering logic
-    presetsScene = self.volRenLogic.GetPresetsScene()
     vrNodes = customPresetsScene.GetNodesByClass("vtkMRMLVolumePropertyNode")
     vrNodes.UnRegister(None)
     for itemNum in range(vrNodes.GetNumberOfItems()):
@@ -316,12 +315,12 @@ class MummyMuseamSlicelet():
   def onOutsidePreset(self):
     if self.currentMummyName:
       self.activatePreset('volumeRenderingA')
-      self.setup3DView
+      self.setup3DView()
 
   def onInsidePreset(self):
     if self.currentMummyName:
       self.activatePreset('volumeRenderingB')
-      self.setup3DView
+      self.setup3DView()
 
   def activatePreset(self, PresetName):
     volumeNode = slicer.util.getNode(self.currentMummyName)
