@@ -175,6 +175,9 @@ class MummyMuseamSlicelet():
 
     self.setupConnections()
 
+    # Show defaul mummy (Mummy1)
+    self.onLoadMummy1()
+
     #Full screen
     self.frameParent.showFullScreen() 
     self.frameParent.show()
