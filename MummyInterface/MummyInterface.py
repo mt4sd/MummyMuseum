@@ -142,7 +142,7 @@ class MummyMuseamSlicelet():
     self.currentMummyName = ""
    
     self.frameParent = FrameParent
-    self.frameParent.setLayout(qt.QVBoxLayout())
+    self.frameParent.setLayout(qt.QHBoxLayout())
 
     self.layout = self.frameParent.layout()
     self.layout.setMargin(0)
