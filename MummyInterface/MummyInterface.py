@@ -269,8 +269,20 @@ class MummyMuseamSlicelet():
     self.setup3DView()
 
   def setViewAxis(self, viewAxis):
+    # Set a VTK predefined view axis
     self.threeDView.resetCamera()
     self.threeDView.rotateToViewAxis(self.viewAxisIndex[viewAxis])
+
+    # Set the attitude customized to the presentation of the mummies
+    if (viewAxis == 'L-axis'):
+      for step in range(18):
+        self.threeDView.roll()
+    if (viewAxis == 'R-axis'):
+      for step in range(54):
+        self.threeDView.roll()
+    if (viewAxis == 'S-axis'):
+      for step in range(36):
+        self.threeDView.roll()
 
   def onViewLClicked(self):
     self.setViewAxis('L-axis')
