@@ -288,6 +288,7 @@ class MummyMuseamSlicelet():
     if (viewAxis == 'S-axis'):
       for step in range(36):
         self.threeDView.roll()
+    self.threeDView.resetFocalPoint()
 
   def onViewLClicked(self):
     self.setViewAxis('L-axis')
