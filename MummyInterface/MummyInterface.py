@@ -169,6 +169,11 @@ class MummyMuseamSlicelet():
     # Set up the Volumen rendering
     self.volRenLogic = slicer.modules.volumerendering.logic()
     self.setupCustomPreset()
+    # Set the Default rendering method. They can be:
+    #    - vtkMRMLCPURayCastVolumeRenderingDisplayNode (combobox: "VTK CPU Ray Casting" )
+    #    - vtkMRMLGPURayCastVolumeRenderingDisplayNode (combobox: "VTK GPU Ray Casting" )
+    #    - vtkMRMLMultiVolumeRenderingDisplayNode (combobox: "VTK Multi-Volume" )
+    self.volRenLogic.SetDefaultRenderingMethod("vtkMRMLGPURayCastVolumeRenderingDisplayNode")
 
     # set up background color, box, label axis
     self.setup3DView()
