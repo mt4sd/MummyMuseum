@@ -148,7 +148,8 @@ class MummyMuseamSlicelet():
     self.layout.setMargin(0)
     self.layout.setSpacing(0)
 
-    uiPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/UI', 'MummyInterface.ui')
+    moduleDir = os.path.dirname(__file__)
+    uiPath = os.path.join(moduleDir, 'Resources', 'UI', 'MummyInterface.ui')
 
     # Load widget from .ui file (created by Qt Designer)
     uiWidget = slicer.util.loadUI(uiPath)
@@ -254,7 +255,8 @@ class MummyMuseamSlicelet():
     self.setup3DView()
     self.currentMummyName = ''
 
-    volumenPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/data', dataFilename)
+    moduleDir = os.path.dirname(__file__)
+    volumenPath = os.path.join(moduleDir, 'Resources', 'data', dataFilename)
     loadedVolumeNode = slicer.util.loadVolume(volumenPath)
 
     if loadedVolumeNode:
@@ -309,8 +311,8 @@ class MummyMuseamSlicelet():
     self.setViewAxis('S-axis')
 
   def setupCustomPreset(self):
-    
-    presetsScenePath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/VolRen/MyPresets.mrml')
+    moduleDir = os.path.dirname(__file__)
+    presetsScenePath = os.path.join(moduleDir, 'Resources', 'VolRen', 'MyPresets.mrml')
 
     # Read presets scene
     customPresetsScene = slicer.vtkMRMLScene()
