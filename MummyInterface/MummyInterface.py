@@ -140,6 +140,7 @@ class MummyMuseamSlicelet():
   def __init__(self, FrameParent):
 
     self.currentMummyName = ""
+    self.currentExplanation = ""
    
     self.frameParent = FrameParent
     self.frameParent.setLayout(qt.QHBoxLayout())
@@ -254,6 +255,7 @@ class MummyMuseamSlicelet():
     slicer.mrmlScene.Clear(0)
     self.setup3DView()
     self.currentMummyName = ''
+    self.currentExplanation = ''
 
     moduleDir = os.path.dirname(__file__)
     volumenPath = os.path.join(moduleDir, 'Resources', 'data', dataFilename)
@@ -268,12 +270,28 @@ class MummyMuseamSlicelet():
         # Se tuo the outside preset
         self.onOutsidePreset()
         displayNode.SetVisibility(True)
+        self.loadMummyExplanation(mummyName)
+        self.showMummyExplanation(mummyName)
       else:
         logging.debug('Slicelet.onLoadMummyX(): No found the mummy node' + mummyName)
     else:
         logging.debug('Slicelet.onLoadMummyX(): No load the mummy' + mummyName)
 
     self.setup3DView()
+
+  def loadMummyExplanation(self, mummyName):
+    moduleDir = os.path.dirname(__file__)
+    explanationPath = os.path.join(moduleDir, 'Resources', 'Data', mummyName + '.txt')
+
+    explanationFile = open(explanationPath, "r")
+    if (explanationFile.mode == 'r'):
+      explanation = explanationFile.read()
+      self.currentExplanation = explanation
+    explanationFile.close()
+
+  def showMummyExplanation(self, mummyName):
+    self.ui.explanatoryText.setReadOnly(1)
+    self.ui.explanatoryText.setPlainText(self.currentExplanation)
 
   def setViewAxis(self, viewAxis):
     # Set a VTK predefined view axis
