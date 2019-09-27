@@ -329,12 +329,10 @@ class MummyMuseamSlicelet():
   def onOutsidePreset(self):
     if self.currentMummyName:
       self.activatePreset('OutsidePreset')
-      self.setup3DView()
 
   def onInsidePreset(self):
     if self.currentMummyName:
       self.activatePreset('InsidePreset')
-      self.setup3DView()
 
   def activatePreset(self, PresetName):
     volumeNode = slicer.util.getNode(self.currentMummyName)
