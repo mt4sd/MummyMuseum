@@ -263,8 +263,8 @@ class MummyMuseamSlicelet():
         self.currentMummyName = mummyName
         # Create all nodes and associated with VolumeNode
         displayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumeNode)
-        # Copy the presert to a current displayNode
-        displayNode.GetVolumePropertyNode().Copy(self.volRenLogic.GetPresetByName('volumeRenderingA'))
+        # Se tuo the outside preset
+        self.onOutsidePreset()
         displayNode.SetVisibility(True)
       else:
         logging.debug('Slicelet.onLoadMummyX(): No found the mummy node' + mummyName)
@@ -328,12 +328,12 @@ class MummyMuseamSlicelet():
 
   def onOutsidePreset(self):
     if self.currentMummyName:
-      self.activatePreset('volumeRenderingA')
+      self.activatePreset('OutsidePreset')
       self.setup3DView()
 
   def onInsidePreset(self):
     if self.currentMummyName:
-      self.activatePreset('volumeRenderingB')
+      self.activatePreset('InsidePreset')
       self.setup3DView()
 
   def activatePreset(self, PresetName):

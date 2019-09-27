@@ -1,9 +1,9 @@
 <MRML version="Slicer4.10.2">
-  <VolumeProperty id="laIdAsignada1" name="volumeRenderingA" references="IconVolume:nombreVolumen1;" interpolation="1" shade="1" diffuse="0.80" ambient="0.25" specular="0" specularPower="40" scalarOpacity="10 -3024 0 -940 0 289 1 2500 1 3200 1" gradientOpacity="6 0 1 344 1 1037 0.8" colorTransfer="16 -3024 0 0 0 -145 0.7 0.48 0.39 312 1 1 0.81 3070 1 1 1" />
+  <VolumeProperty id="laIdAsignada1" name="OutsidePreset" references="IconVolume:nombreVolumen1;" interpolation="1" shade="1" diffuse="0.80" ambient="0.25" specular="0" specularPower="40" scalarOpacity="10 -3024 0 -940 0 289 1 2500 1 3200 1" gradientOpacity="6 0 1 344 1 1037 0.8" colorTransfer="16 -3024 0 0 0 -145 0.7 0.48 0.39 312 1 1 0.81 3070 1 1 1" />
   <VectorVolume id="nombreVolumen1" references="storage:nombreAlmacenaje1;" />  
   <VolumeArchetypeStorage id="nombreAlmacenaje1" fileName="MyPreset1.png"  fileListMember0="MyPreset1.png" />
 
-  <VolumeProperty id="laIdAsignada2" name="volumeRenderingB" references="IconVolume:nombreVolumen2;" interpolation="1" shade="1" diffuse="0.80" ambient="0.25" specular="0" specularPower="40" scalarOpacity="10 -3024 0 -288 0 1895 1 2500 1 3200 1" gradientOpacity="6 0 1 344 1 1037 0.8" colorTransfer="16 -3024 0 0 0 -145 0.7 0.48 0.39 312 1 1 0.81 3070 1 1 1" />
+  <VolumeProperty id="laIdAsignada2" name="InsidePreset" references="IconVolume:nombreVolumen2;" interpolation="1" shade="1" diffuse="0.80" ambient="0.25" specular="0" specularPower="40" scalarOpacity="10 -3024 0 -288 0 1895 1 2500 1 3200 1" gradientOpacity="6 0 1 344 1 1037 0.8" colorTransfer="16 -3024 0 0 0 -145 0.7 0.48 0.39 312 1 1 0.81 3070 1 1 1" />
   <VectorVolume id="nombreVolumen2" references="storage:nombreAlmacenaje2;" />  
   <VolumeArchetypeStorage id="nombreAlmacenaje2" fileName="MyPreset2.png"  fileListMember0="MyPreset2.png" />
 
