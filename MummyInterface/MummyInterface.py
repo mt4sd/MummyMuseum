@@ -153,9 +153,19 @@ class MummyMuseamSlicelet():
     uiPath = os.path.join(moduleDir, 'Resources', 'UI', 'MummyInterface.ui')
 
     # Load widget from .ui file (created by Qt Designer)
-    uiWidget = slicer.util.loadUI(uiPath)
-    self.layout.addWidget(uiWidget)
-    self.ui = slicer.util.childWidgetVariables(uiWidget)
+    self.uiWidget = slicer.util.loadUI(uiPath)
+    self.layout.addWidget(self.uiWidget)
+    self.ui = slicer.util.childWidgetVariables(self.uiWidget)
+
+    # keyboard "v" shows the control panel
+    shortcutShow = qt.QShortcut(self.frameParent)
+    shortcutShow.setKey(qt.QKeySequence("v"))
+    shortcutShow.connect('activated()', lambda: self.showPanel())
+
+    # keyboard "e" hides the control panel
+    shortcutHide = qt.QShortcut(self.frameParent)
+    shortcutHide.setKey(qt.QKeySequence("e"))
+    shortcutHide.connect('activated()', lambda: self.hidePanel())
 
     # Add layout widget
     self.layoutWidget = slicer.qMRMLLayoutWidget()
@@ -202,7 +212,7 @@ class MummyMuseamSlicelet():
     self.ui.volumeRenderingAButton.connect("clicked()", self.onOutsidePreset)
     self.ui.volumeRenderingBButton.connect("clicked()", self.onInsidePreset)
 
-# Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
+  # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
     self.ui.mummyButton1.disconnect('clicked()', self.onLoadMummy1)
     self.ui.mummyButton2.disconnect('clicked()', self.onLoadMummy2)
@@ -363,6 +373,12 @@ class MummyMuseamSlicelet():
       displayNode.GetVolumePropertyNode().Copy(self.volRenLogic.GetPresetByName(PresetName))
     else:
       logging.debug('Slicelet.activatePreset(): No found the mummy node' + self.currentMummyName)
+
+  def showPanel(self):
+    self.uiWidget.show()
+
+  def hidePanel(self):
+    self.uiWidget.hide()
 
 #
 # Main
