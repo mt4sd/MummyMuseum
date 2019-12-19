@@ -268,8 +268,9 @@ class MummyMuseamSlicelet():
     self.currentExplanation = ''
 
     moduleDir = os.path.dirname(__file__)
-    volumenPath = os.path.join(moduleDir, 'Resources', 'data', dataFilename)
+    volumenPath = os.path.join(moduleDir, 'Resources', 'Data', dataFilename)
     loadedVolumeNode = slicer.util.loadVolume(volumenPath)
+    print("Llegue")
 
     if loadedVolumeNode:
       volumeNode = slicer.util.getNode(mummyName)
@@ -341,6 +342,7 @@ class MummyMuseamSlicelet():
   def setupCustomPreset(self):
     moduleDir = os.path.dirname(__file__)
     presetsScenePath = os.path.join(moduleDir, 'Resources', 'VolRen', 'MyPresets.mrml')
+    print(presetsScenePath)
 
     # Read presets scene
     customPresetsScene = slicer.vtkMRMLScene()
