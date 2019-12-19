@@ -39,6 +39,13 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
 
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
+
+    moduleDir = os.path.dirname(__file__)
+    uiPath = os.path.join(moduleDir, 'Resources', 'UI', 'MummyInterface.ui')
+    # Load widget from .ui file (created by Qt Designer)
+    self.uiWidget = slicer.util.loadUI(uiPath)
+    self.layout.addWidget(self.uiWidget)
+
     
      # Show slicelet button
     showSliceletButton = qt.QPushButton("Show slicelet")
