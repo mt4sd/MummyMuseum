@@ -13,7 +13,7 @@ set(MODULE_PYTHON_RESOURCES
   Resources/Data/Mummy2.nrrd
   Resources/Data/Mummy1.txt
   Resources/Data/Mummy2.txt
-  Resources/VolRen/MyPrests.mrml
+  Resources/VolRen/MyPresets.mrml
   )
 
 #-----------------------------------------------------------------------------
