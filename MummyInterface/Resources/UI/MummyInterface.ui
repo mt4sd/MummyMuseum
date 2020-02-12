@@ -16,12 +16,6 @@
     <verstretch>100</verstretch>
    </sizepolicy>
   </property>
-  <property name="maximumSize">
-   <size>
-    <width>366</width>
-    <height>1500</height>
-   </size>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <widget class="QLabel" name="mummyTitle">
