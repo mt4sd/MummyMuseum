@@ -5,9 +5,16 @@ from slicer.ScriptedLoadableModule import *
 import logging
 
 #
+# MummyInterfacePresets
+#
+class MummyInterfacePresets():
+      INSIDE = "InsidePreset"
+      OUTSIDE = "OutsidePreset"
+
+
+#
 # MummyInterface
 #
-
 class MummyInterface(ScriptedLoadableModule):
   """Uses ScriptedLoadableModule base class, available at:
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
@@ -17,7 +24,7 @@ class MummyInterface(ScriptedLoadableModule):
     ScriptedLoadableModule.__init__(self, parent)
     self.parent.title = "MummyInterface" # TODO make this more human readable by adding spaces
     self.parent.categories = ["Slicelet"]
-    self.parent.dependencies = []
+    self.parent.dependencies = ["VolumeRendering"]
     self.parent.contributors = ["Nayra, Guillermo, Carlos Luque"] # replace with "Firstname Lastname (Organization)"
     self.parent.helpText = "Slicelet for Mummy Museam"
     self.parent.acknowledgementText = "This file was originally developed by Nayra, Guillermo, Carlos Luque " 
@@ -28,7 +35,6 @@ class MummyInterface(ScriptedLoadableModule):
 #
 # MummyInterfaceWidget
 #
-
 class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
   """Uses ScriptedLoadableModuleWidget base class, available at:
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
@@ -36,19 +42,70 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
 
   def __init__(self, parent):
     ScriptedLoadableModuleWidget.__init__(self, parent)
+    self.logic = MummyInterfaceLogic()
 
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
+
+    layoutManager = slicer.app.layoutManager()
+    layoutManager.setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUp3DView)
+    layoutManager.threeDWidget(0).threeDController().setVisible(False)
+    self.setup3DView(layoutManager)
+
+
+    moduleDir = os.path.dirname(__file__)
+    uiPath = os.path.join(moduleDir, 'Resources', 'UI', 'MummyInterface.ui')
+    # Load widget from .ui file (created by Qt Designer)
+    self.ui = slicer.util.loadUI(uiPath)
+    self.layout.addWidget(self.ui)
     
      # Show slicelet button
-    showSliceletButton = qt.QPushButton("Show slicelet")
-    showSliceletButton.toolTip = "Launch the slicelet"
-    self.layout.addWidget(qt.QLabel(' '))
-    self.layout.addWidget(showSliceletButton)
-    showSliceletButton.connect('clicked()', self.launchSlicelet)
+    # showSliceletButton = qt.QPushButton("Show slicelet")
+    # showSliceletButton.toolTip = "Launch the slicelet"
+    # self.layout.addWidget(qt.QLabel(' '))
+    # self.layout.addWidget(showSliceletButton)
+    # showSliceletButton.connect('clicked()', self.launchSlicelet)
+
+    print("Hola bebe")
+    self.setupConnections()
     
     # Add vertical spacer
     self.layout.addStretch(1)
+
+  def setup3DView(self, layoutManager):
+    bgTop = 0.05, 0.05, 0.05
+    bgBtm = 0.36, 0.25, 0.2
+   
+    viewNode = layoutManager.threeDWidget(0).mrmlViewNode()
+    viewNode.SetBoxVisible(False)
+    viewNode.SetAxisLabelsVisible(False)
+    viewNode.SetBackgroundColor(bgTop)
+    viewNode.SetBackgroundColor2(bgBtm)
+
+  def setupConnections(self):
+    logging.debug('Slicelet.setupConnections()')
+    self.ui.mummyButton1.connect('clicked()', self.logic.onLoadMummy1)
+    # self.ui.mummyButton2.connect('clicked()', self.onLoadMummy2)
+    # self.ui.viewButtonS.connect("clicked()", self.onViewSClicked)
+    # self.ui.viewButtonI.connect("clicked()", self.onViewIClicked)
+    # self.ui.viewButtonA.connect("clicked()", self.onViewAClicked)
+    # self.ui.viewButtonP.connect("clicked()", self.onViewPClicked)
+    # self.ui.viewButtonL.connect("clicked()", self.onViewLClicked)
+    # self.ui.viewButtonR.connect("clicked()", self.onViewRClicked)
+    self.ui.volumeRenderingAButton.clicked.connect( lambda: self.logic.activatePreset(MummyInterfacePresets.OUTSIDE) )
+    self.ui.volumeRenderingBButton.clicked.connect( lambda: self.logic.activatePreset(MummyInterfacePresets.INSIDE) )
+
+  # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
+  def disconnect(self):
+    self.ui.mummyButton1.disconnect('clicked()', self.logic.onLoadMummy1)
+    # self.ui.mummyButton2.disconnect('clicked()', self.onLoadMummy2)
+    # self.ui.viewButtonS.disconnect("clicked()", self.onViewSClicked)
+    # self.ui.viewButtonI.disconnect("clicked()", self.onViewIClicked)
+    # self.ui.viewButtonA.disconnect("clicked()", self.onViewAClicked)
+    # self.ui.viewButtonP.disconnect("clicked()", self.onViewPClicked)
+    # self.ui.viewButtonL.disconnect("clicked()", self.onViewLClicked)
+    # self.ui.viewButtonR.disconnect("clicked()", self.onViewRClicked)
+    
 
 
   def launchSlicelet(self):
@@ -92,7 +149,6 @@ class MummyInterfaceTest(ScriptedLoadableModuleTest):
 #
 # MummyInterfaceLogic
 #
-
 class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
   """This class should implement all the actual
   computation done by your module.  The interface
@@ -102,11 +158,95 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
   Uses ScriptedLoadableModuleLogic base class, available at:
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
   """
-  def todo(self):
-    pass
+
+  def __init__(self):
+    self.currentMummyName = ""
+    self.volRenLogic = slicer.modules.volumerendering.logic()
+    self.setupCustomPreset()
+
+    # Set the Default rendering method. They can be:
+    #    - vtkMRMLCPURayCastVolumeRenderingDisplayNode (combobox: "VTK CPU Ray Casting" )
+    #    - vtkMRMLGPURayCastVolumeRenderingDisplayNode (combobox: "VTK GPU Ray Casting" )
+    #    - vtkMRMLMultiVolumeRenderingDisplayNode (combobox: "VTK Multi-Volume" )
+    self.volRenLogic.SetDefaultRenderingMethod("vtkMRMLGPURayCastVolumeRenderingDisplayNode")
+
+  def onLoadMummy1(self):
+    logging.debug('Slicelet.onLoadMummy1()')
+
+    mummyName = 'Mummy1'
+    dataFilename = 'Mummy1.nrrd'
+    if mummyName == self.currentMummyName:  # Avoid unnecesary load of the current mummy
+      return
+
+    self.onLoadMummyX(dataFilename, mummyName)
+
+  def onLoadMummyX(self, dataFilename, mummyName):
+    logging.debug('Slicelet.onLoadMummyX()')
+
+    # clean all generated node in mrml
+    # slicer.mrmlScene.Clear(0)
+    # self.setup3DView()
+    self.currentMummyName = ''
+    self.currentExplanation = ''
+
+    moduleDir = os.path.dirname(__file__)
+    volumenPath = os.path.join(moduleDir, 'Resources', 'Data', dataFilename)
+    loadedVolumeNode = slicer.util.loadVolume(volumenPath)
+
+    if loadedVolumeNode:
+      volumeNode = slicer.util.getNode(mummyName)
+      if volumeNode:
+        self.currentMummyName = mummyName
+        # Create all nodes and associated with VolumeNode
+        displayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumeNode)
+        # Se tuo the outside preset
+        # self.onOutsidePreset()
+        displayNode.SetVisibility(True)
+        # self.loadMummyExplanation(mummyName)
+        # self.showMummyExplanation(mummyName)
+      else:
+        logging.debug('Slicelet.onLoadMummyX(): No found the mummy node' + mummyName)
+    else:
+        logging.debug('Slicelet.onLoadMummyX(): No load the mummy' + mummyName)
+
+  def setupCustomPreset(self):
+    moduleDir = os.path.dirname(__file__)
+    presetsScenePath = os.path.join(moduleDir, 'Resources', 'VolRen', 'MyPresets.mrml')
+
+    # Read presets scene
+    mrmlScene = slicer.vtkMRMLScene()
+    vrPropNode = slicer.vtkMRMLVolumePropertyNode()
+    mrmlScene.RegisterNodeClass(vrPropNode)
+    mrmlScene.SetURL(presetsScenePath)
+    mrmlScene.Connect()
+
+    # Add presets to volume rendering logic
+    vrNodes = mrmlScene.GetNodesByClass("vtkMRMLVolumePropertyNode")
+    vrNodes.UnRegister(None)
+    for itemNum in range(vrNodes.GetNumberOfItems()):
+      node = vrNodes.GetItemAsObject(itemNum)
+      self.volRenLogic.AddPreset(node)
+
+  def activatePreset(self, PresetName):
+    if self.currentMummyName == '':
+      return
+    
+    volumeNode = slicer.util.getNode(self.currentMummyName)
+    
+    if volumeNode:
+      # Get the (Volumen Rendering) display node associated with the volume node
+      displayNode = self.volRenLogic.GetFirstVolumeRenderingDisplayNode(volumeNode)
+      # Copy the presert to a current displayNode
+      displayNode.GetVolumePropertyNode().Copy(self.volRenLogic.GetPresetByName(PresetName))
+    else:
+      logging.debug('Slicelet.activatePreset(): No found the mummy node' + self.currentMummyName)
+  
 
 
 
+  ###############
+ ## To Remove ##
+###############
 #
 # SliceletMainFrame
 #   Handles the event when the slicelet is hidden (its window closed)
@@ -268,8 +408,9 @@ class MummyMuseamSlicelet():
     self.currentExplanation = ''
 
     moduleDir = os.path.dirname(__file__)
-    volumenPath = os.path.join(moduleDir, 'Resources', 'data', dataFilename)
+    volumenPath = os.path.join(moduleDir, 'Resources', 'Data', dataFilename)
     loadedVolumeNode = slicer.util.loadVolume(volumenPath)
+    print("Llegue")
 
     if loadedVolumeNode:
       volumeNode = slicer.util.getNode(mummyName)
@@ -341,6 +482,7 @@ class MummyMuseamSlicelet():
   def setupCustomPreset(self):
     moduleDir = os.path.dirname(__file__)
     presetsScenePath = os.path.join(moduleDir, 'Resources', 'VolRen', 'MyPresets.mrml')
+    print(presetsScenePath)
 
     # Read presets scene
     customPresetsScene = slicer.vtkMRMLScene()
