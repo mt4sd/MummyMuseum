@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>334</width>
+    <width>352</width>
     <height>899</height>
    </rect>
   </property>
@@ -45,44 +45,10 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1" alignment="Qt::AlignLeft">
-    <widget class="QPushButton" name="mummyButton2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>100</width>
-       <height>60</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>Cargar la momia2</string>
-     </property>
+   <item row="3" column="1" alignment="Qt::AlignHCenter|Qt::AlignBottom">
+    <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>Momia2</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="0">
-    <widget class="QPushButton" name="volumeRenderingAButton">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>100</width>
-       <height>60</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Exterior</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;Momia 2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>
@@ -99,257 +65,10 @@
      </property>
     </spacer>
    </item>
-   <item row="18" column="0" colspan="2">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>ESPACIO PARA EL RESTO DE LOGOS</string>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="0" colspan="3">
-    <spacer name="spacer2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="19" column="0" colspan="3">
-    <spacer name="horizontalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>200</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="0" colspan="3">
-    <widget class="Line" name="spacerLine1">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-       <horstretch>100</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="2">
-    <widget class="QPushButton" name="viewButtonR">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>100</width>
-       <height>60</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Derecha</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="0" colspan="3">
-    <widget class="Line" name="spacerLine2">
-     <property name="windowModality">
-      <enum>Qt::ApplicationModal</enum>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-       <horstretch>100</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0" colspan="2">
-    <widget class="QLabel" name="labelRow2">
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Seleccione la vista:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item row="15" column="0" colspan="3">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="0" colspan="2" alignment="Qt::AlignTop">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>ESPACIO PARA EL LOGO DEL MUSEO</string>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="0" colspan="2">
-    <widget class="QLabel" name="labelRow3">
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Partes a mostrar:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" alignment="Qt::AlignHCenter|Qt::AlignBottom">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;Momia 1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1">
-    <widget class="QPushButton" name="viewButtonP">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>100</width>
-       <height>60</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Trasera</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="2">
-    <widget class="QPushButton" name="viewButtonL">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>100</width>
-       <height>60</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Izquierda</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="3">
-    <widget class="QLabel" name="labelRow1">
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Seleccione una momia:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" alignment="Qt::AlignLeft">
-    <widget class="QPushButton" name="mummyButton1">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>100</width>
-       <height>60</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>Cargar la momia1</string>
-     </property>
-     <property name="text">
-      <string>Momia1</string>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="2" alignment="Qt::AlignHCenter|Qt::AlignBottom">
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;Momia 3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" alignment="Qt::AlignHCenter|Qt::AlignBottom">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;Momia 2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="3">
-    <spacer name="spacer1">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="9" column="0">
-    <widget class="QPushButton" name="viewButtonI">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>100</width>
-       <height>60</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Inferior</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="2">
-    <widget class="QPushButton" name="volumeRenderingBButton">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>100</width>
-       <height>60</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Interior</string>
      </property>
     </widget>
    </item>
@@ -378,18 +97,105 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="3">
-    <spacer name="horizontalSpacer_2">
+   <item row="20" column="0" colspan="3">
+    <spacer name="horizontalSpacer_4">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>40</width>
-       <height>20</height>
+       <height>200</height>
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="9" column="1">
+    <widget class="QPushButton" name="viewButtonP">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>60</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Trasera</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0" colspan="3">
+    <widget class="Line" name="spacerLine2">
+     <property name="windowModality">
+      <enum>Qt::ApplicationModal</enum>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>100</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" alignment="Qt::AlignHCenter|Qt::AlignBottom">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;Momia 1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="0" colspan="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>ESPACIO PARA EL RESTO DE LOGOS</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="2">
+    <widget class="QPushButton" name="viewButtonR">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>60</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Derecha</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QPushButton" name="viewButtonI">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>60</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Inferior</string>
+     </property>
+    </widget>
    </item>
    <item row="8" column="1">
     <widget class="QPushButton" name="viewButtonA">
@@ -407,6 +213,32 @@
      </property>
      <property name="text">
       <string>Frontal</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
+    <widget class="QLabel" name="labelRow2">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Seleccione la vista:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="2">
+    <widget class="QPushButton" name="volumeRenderingBButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>60</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Interior</string>
      </property>
     </widget>
    </item>
@@ -431,6 +263,207 @@
       </size>
      </property>
     </widget>
+   </item>
+   <item row="2" column="0" colspan="3">
+    <widget class="QLabel" name="labelRow1">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Seleccione una momia:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="0">
+    <widget class="QPushButton" name="volumeRenderingAButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>60</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Exterior</string>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="0" colspan="2">
+    <widget class="QLabel" name="labelRow3">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Partes a mostrar:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" alignment="Qt::AlignLeft">
+    <widget class="QPushButton" name="mummyButton1">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>60</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Cargar la momia1</string>
+     </property>
+     <property name="text">
+      <string>Momia1</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="2">
+    <widget class="QPushButton" name="viewButtonL">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>60</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Izquierda</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="3">
+    <widget class="Line" name="spacerLine1">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>100</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2" alignment="Qt::AlignTop">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>ESPACIO PARA EL LOGO DEL MUSEO</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="3">
+    <spacer name="spacer1">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="1" alignment="Qt::AlignLeft">
+    <widget class="QPushButton" name="mummyButton2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>60</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Cargar la momia2</string>
+     </property>
+     <property name="text">
+      <string>Momia2</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0" colspan="3">
+    <spacer name="spacer2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="15" column="0" colspan="3">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="19" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="vrSwitchButton">
+       <property name="maximumSize">
+        <size>
+         <width>120</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Activar RV</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="vrResetButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>120</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Restablecer vista</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
