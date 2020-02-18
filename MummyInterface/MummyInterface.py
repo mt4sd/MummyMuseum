@@ -105,7 +105,15 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
   def todo(self):
     pass
 
-
+  def switchVirtualReality(self):
+    print("switchVirtualReality ...")
+    vrLogic = slicer.modules.virtualreality.logic()
+    if (vrLogic.GetVirtualRealityActive()):
+      vrLogic.SetVirtualRealityActive(False)
+      vrLogic.SetVirtualRealityConnected(False)
+    else:
+      vrLogic.SetVirtualRealityConnected(True)
+      vrLogic.SetVirtualRealityActive(True)
 
 #
 # SliceletMainFrame
@@ -138,6 +146,8 @@ class MummyMuseamSlicelet():
                    'I-axis' : 4, 'S-axis' : 5}
 
   def __init__(self, FrameParent):
+
+    self.logic = MummyInterfaceLogic()
 
     self.currentMummyName = ""
     self.currentExplanation = ""
@@ -211,6 +221,7 @@ class MummyMuseamSlicelet():
     self.ui.viewButtonR.connect("clicked()", self.onViewRClicked)
     self.ui.volumeRenderingAButton.connect("clicked()", self.onOutsidePreset)
     self.ui.volumeRenderingBButton.connect("clicked()", self.onInsidePreset)
+    self.ui.vrSwitchButton.clicked.connect(lambda: self.switchVirtualRealityActivation())
 
   # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
@@ -373,6 +384,19 @@ class MummyMuseamSlicelet():
       displayNode.GetVolumePropertyNode().Copy(self.volRenLogic.GetPresetByName(PresetName))
     else:
       logging.debug('Slicelet.activatePreset(): No found the mummy node' + self.currentMummyName)
+
+  def switchVirtualRealityActivation(self):
+    self.logic.switchVirtualReality()
+    if (slicer.modules.virtualreality.logic().GetVirtualRealityActive()):
+      self.ui.vrSwitchButton.setText("Desactivar RV")
+      self.ui.vrResetButton.setEnabled(True)
+    else:
+      self.ui.vrSwitchButton.setText("Activar RV")
+      self.ui.vrResetButton.setEnabled(False)
+
+
+
+
 
   def showPanel(self):
     self.uiWidget.show()
