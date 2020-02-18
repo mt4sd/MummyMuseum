@@ -94,6 +94,9 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
     # self.ui.viewButtonR.connect("clicked()", self.onViewRClicked)
     self.ui.volumeRenderingAButton.clicked.connect( lambda: self.logic.activatePreset(MummyInterfacePresets.OUTSIDE) )
     self.ui.volumeRenderingBButton.clicked.connect( lambda: self.logic.activatePreset(MummyInterfacePresets.INSIDE) )
+    self.ui.vrActivationButton.clicked.connect(lambda: self.onSwitchVirtualRealityActivation())
+
+
 
   # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
@@ -105,6 +108,7 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
     # self.ui.viewButtonP.disconnect("clicked()", self.onViewPClicked)
     # self.ui.viewButtonL.disconnect("clicked()", self.onViewLClicked)
     # self.ui.viewButtonR.disconnect("clicked()", self.onViewRClicked)
+    self.ui.vrActivationButton.clicked.disconnect(lambda: self.onSwitchVirtualRealityActivation())
     
 
 
@@ -125,6 +129,16 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
 
   def onSliceletClosed(self):
     logging.debug('Slicelet closed')
+
+  def onSwitchVirtualRealityActivation(self):
+    print("VR activation ...")
+    self.logic.switchVirtualReality()
+    if (slicer.modules.virtualreality.logic().GetVirtualRealityActive()):
+      self.ui.vrActivationButton.setText("Desactivar RV")
+      self.ui.vrResetButton.setEnabled(True)
+    else:
+      self.ui.vrActivationButton.setText("Activar RV")
+      self.ui.vrResetButton.setEnabled(False)
 
 
 class MummyInterfaceTest(ScriptedLoadableModuleTest):
@@ -240,8 +254,16 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
       displayNode.GetVolumePropertyNode().Copy(self.volRenLogic.GetPresetByName(PresetName))
     else:
       logging.debug('Slicelet.activatePreset(): No found the mummy node' + self.currentMummyName)
-  
 
+  def switchVirtualReality(self):
+    vrLogic = slicer.modules.virtualreality.logic()
+    if (vrLogic.GetVirtualRealityActive()):
+      vrLogic.SetVirtualRealityActive(False)
+      vrLogic.SetVirtualRealityConnected(False)
+    else:
+      vrLogic.SetVirtualRealityConnected(True)
+      vrLogic.SetVirtualRealityActive(True)
+  
 
 
   ###############
@@ -284,6 +306,8 @@ class MummyMuseamSlicelet():
    
     self.frameParent = FrameParent
     self.frameParent.setLayout(qt.QHBoxLayout())
+
+    self.logic = MummyInterfaceLogic()
 
     self.layout = self.frameParent.layout()
     self.layout.setMargin(0)
@@ -364,6 +388,7 @@ class MummyMuseamSlicelet():
     self.ui.viewButtonR.disconnect("clicked()", self.onViewRClicked)
     self.ui.volumeRenderingAButton.connect("clicked()", self.onOutsidePreset)
     self.ui.volumeRenderingBButton.connect("clicked()", self.onInsidePreset)
+
 
   def setup3DView(self):
     bg_top = 0.05, 0.05, 0.05
@@ -521,6 +546,7 @@ class MummyMuseamSlicelet():
 
   def hidePanel(self):
     self.uiWidget.hide()
+
 
 #
 # Main
