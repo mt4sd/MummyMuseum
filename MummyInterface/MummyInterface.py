@@ -111,12 +111,16 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     if (vrLogic.GetVirtualRealityActive()):
       vrLogic.SetVirtualRealityActive(False)
       vrLogic.SetVirtualRealityConnected(False)
-      slicer.app.layoutManager().threeDWidget(0).setVisible(True)
+      # slicer.app.layoutManager().threeDWidget(0).setVisible(True)
     else:
       vrLogic.OptimizeSceneForVirtualReality()
       vrLogic.SetVirtualRealityConnected(True)
       vrLogic.SetVirtualRealityActive(True)
-      slicer.app.layoutManager().threeDWidget(0).setVisible(False)
+      bg_top = 0.05, 0.05, 0.05
+      bg_btm = 0.36, 0.25, 0.2
+      vrLogic.GetVirtualRealityViewNode().SetBackgroundColor(bg_top)
+      vrLogic.GetVirtualRealityViewNode().SetBackgroundColor2(bg_btm)
+      # slicer.app.layoutManager().threeDWidget(0).setVisible(False)
 
 #
 # SliceletMainFrame
@@ -287,7 +291,6 @@ class MummyMuseamSlicelet():
 
     if loadedVolumeNode:
       volumeNode = slicer.util.getNode(mummyName)
-      self.volumeNode = volumeNode
       if volumeNode:
         self.currentMummyName = mummyName
         # Create all nodes and associated with VolumeNode
@@ -302,6 +305,7 @@ class MummyMuseamSlicelet():
     else:
         logging.debug('Slicelet.onLoadMummyX(): No load the mummy' + mummyName)
 
+    self.volumeRenderingDisplayNode = displayNode
     self.setup3DView()
 
   def loadMummyExplanation(self, mummyName):
@@ -391,13 +395,16 @@ class MummyMuseamSlicelet():
 
   def switchVirtualRealityActivation(self):
     self.logic.switchVirtualReality()
-    if (slicer.modules.virtualreality.logic().GetVirtualRealityActive()):
+    vrLogic = slicer.modules.virtualreality.logic()
+    if (vrLogic.GetVirtualRealityActive()):
       self.ui.vrSwitchButton.setText("Desactivar RV")
       self.ui.vrResetButton.setEnabled(True)
-      self.volRenLogic.CreateDefaultVolumeRenderingNodes(self.volumeNode)
+      self.volumeRenderingDisplayNode.AddViewNodeID(vrLogic.GetVirtualRealityViewNode().GetID())
+      slicer.modules.virtualreality.viewWidget().updateViewFromReferenceViewCamera()
     else:
       self.ui.vrSwitchButton.setText("Activar RV")
       self.ui.vrResetButton.setEnabled(False)
+      self.volumeRenderingDisplayNode.RemoveViewNodeID(vrLogic.GetVirtualRealityViewNode().GetID())
 
 
 
