@@ -284,6 +284,7 @@ class MummyMuseamSlicelet():
 
     if loadedVolumeNode:
       volumeNode = slicer.util.getNode(mummyName)
+      self.volumeNode = volumeNode
       if volumeNode:
         self.currentMummyName = mummyName
         # Create all nodes and associated with VolumeNode
@@ -390,6 +391,7 @@ class MummyMuseamSlicelet():
     if (slicer.modules.virtualreality.logic().GetVirtualRealityActive()):
       self.ui.vrSwitchButton.setText("Desactivar RV")
       self.ui.vrResetButton.setEnabled(True)
+      self.volRenLogic.CreateDefaultVolumeRenderingNodes(self.volumeNode)
     else:
       self.ui.vrSwitchButton.setText("Activar RV")
       self.ui.vrResetButton.setEnabled(False)
