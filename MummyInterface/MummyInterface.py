@@ -111,9 +111,12 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     if (vrLogic.GetVirtualRealityActive()):
       vrLogic.SetVirtualRealityActive(False)
       vrLogic.SetVirtualRealityConnected(False)
+      slicer.app.layoutManager().threeDWidget(0).setVisible(True)
     else:
+      vrLogic.OptimizeSceneForVirtualReality()
       vrLogic.SetVirtualRealityConnected(True)
       vrLogic.SetVirtualRealityActive(True)
+      slicer.app.layoutManager().threeDWidget(0).setVisible(False)
 
 #
 # SliceletMainFrame
