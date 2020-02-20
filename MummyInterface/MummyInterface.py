@@ -75,29 +75,24 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
     self.ui = slicer.util.loadUI(uiPath)
     self.layout.addWidget(self.ui)
     
-     # Show slicelet button
+    # Show slicelet button
     # showSliceletButton = qt.QPushButton("Show slicelet")
     # showSliceletButton.toolTip = "Launch the slicelet"
     # self.layout.addWidget(qt.QLabel(' '))
     # self.layout.addWidget(showSliceletButton)
     # showSliceletButton.connect('clicked()', self.launchSlicelet)
 
-    # aFIXME
-    print("Hola bebe")
     self.setupConnections()
     
     # Add vertical spacer
-    self.layout.addStretch(1)
+    # self.layout.addStretch(1)
 
   def setup3DView(self, layoutManager):
-    bgTop = 0.05, 0.05, 0.05
-    bgBtm = 0.36, 0.25, 0.2
-   
     viewNode = layoutManager.threeDWidget(0).mrmlViewNode()
     viewNode.SetBoxVisible(False)
     viewNode.SetAxisLabelsVisible(False)
-    viewNode.SetBackgroundColor(bgTop)
-    viewNode.SetBackgroundColor2(bgBtm)
+    self.logic.setDefaultBackgroundColor(viewNode)
+
 
   def setupConnections(self):
     logging.debug('Slicelet.setupConnections()')
@@ -129,8 +124,8 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
       self.logic.setViewAxis('R-axis')
 
   def onLoadMummy(self, mummyDataset):
-    print(mummyDataset["name"])
     self.logic.loadMummy(mummyDataset)
+    self.setup3DView(slicer.app.layoutManager())
     description = self.logic.loadMummyDescription(mummyDataset)
     self.ui.explanatoryText.setPlainText(description)
 
@@ -214,7 +209,6 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     # clean all generated node in mrml
     slicer.mrmlScene.Clear(0)
     #self.setup3DView()
-    print(mummyDataset["name"])
     self.currentMummyDataset = mummyDataset
 
     moduleDir = os.path.dirname(__file__)
@@ -269,7 +263,7 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     else:
       logging.debug('Slicelet.activatePreset(): No found the mummy node' + self.currentMummyName)
 
-  def setBackgroundColor(self, viewNode):
+  def setDefaultBackgroundColor(self, viewNode):
     bg_top = 0.05, 0.05, 0.05
     bg_btm = 0.36, 0.25, 0.2
     viewNode.SetBackgroundColor(bg_top)
@@ -282,7 +276,7 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     self.vrLogic.SetVirtualRealityActive(True)
     vrViewNode = self.vrLogic.GetVirtualRealityViewNode()
     self.volumeRendDisplayNode.AddViewNodeID(vrViewNode.GetID())
-    self.setBackgroundColor(vrViewNode)
+    self.setDefaultBackgroundColor(vrViewNode)
     self.vrEnabled = True
 
   def deactivateVirtualReality(self):
