@@ -8,9 +8,21 @@ import logging
 # MummyInterfacePresets
 #
 class MummyInterfacePresets():
-      INSIDE = "InsidePreset"
-      OUTSIDE = "OutsidePreset"
+  INSIDE = "InsidePreset"
+  OUTSIDE = "OutsidePreset"
 
+class MummyInterfaceViews():
+  LEFT = 0
+  RIGHT = 1
+  POSTERIOR = 2
+  ANTERIOR = 3
+  INFERIOR = 4
+  SUPERIOR = 5
+  
+class MummyInterfaceDataset():
+  MUMMY1 = {"name": "Mummy1", "dataFilename": "Mummy1.nrrd", "descriptionFilename" : "Mummy1.txt"}
+  MUMMY2 = {"name": "Mummy2", "dataFilename": "Mummy2.nrrd", "descriptionFilename" : "Mummy2.txt"}
+  MUMMY3 = {"name": "Mummy3", "dataFilename": "Mummy3.nrrd", "descriptionFilename" : "Mummy3.txt"}
 
 #
 # MummyInterface
@@ -24,8 +36,8 @@ class MummyInterface(ScriptedLoadableModule):
     ScriptedLoadableModule.__init__(self, parent)
     self.parent.title = "MummyInterface" # TODO make this more human readable by adding spaces
     self.parent.categories = ["Slicelet"]
-    self.parent.dependencies = ["VolumeRendering"]
-    self.parent.contributors = ["Nayra, Guillermo, Carlos Luque"] # replace with "Firstname Lastname (Organization)"
+    self.parent.dependencies = ["VolumeRendering", "VirtualReality"]
+    self.parent.contributors = ["Nayra, Guillermo, Carlos Luque, Abian Hernandez"] # replace with "Firstname Lastname (Organization)"
     self.parent.helpText = "Slicelet for Mummy Museam"
     self.parent.acknowledgementText = "This file was originally developed by Nayra, Guillermo, Carlos Luque " 
 
@@ -58,74 +70,84 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
     # Load widget from .ui file (created by Qt Designer)
     self.ui = slicer.util.loadUI(uiPath)
     self.layout.addWidget(self.ui)
-    
-     # Show slicelet button
-    # showSliceletButton = qt.QPushButton("Show slicelet")
-    # showSliceletButton.toolTip = "Launch the slicelet"
-    # self.layout.addWidget(qt.QLabel(' '))
-    # self.layout.addWidget(showSliceletButton)
-    # showSliceletButton.connect('clicked()', self.launchSlicelet)
 
-    print("Hola bebe")
     self.setupConnections()
-    
-    # Add vertical spacer
-    self.layout.addStretch(1)
+
 
   def setup3DView(self, layoutManager):
-    bgTop = 0.05, 0.05, 0.05
-    bgBtm = 0.36, 0.25, 0.2
-   
     viewNode = layoutManager.threeDWidget(0).mrmlViewNode()
     viewNode.SetBoxVisible(False)
     viewNode.SetAxisLabelsVisible(False)
-    viewNode.SetBackgroundColor(bgTop)
-    viewNode.SetBackgroundColor2(bgBtm)
+    self.logic.setDefaultBackgroundColor(viewNode)
+
 
   def setupConnections(self):
     logging.debug('Slicelet.setupConnections()')
-    self.ui.mummyButton1.connect('clicked()', self.logic.onLoadMummy1)
-    # self.ui.mummyButton2.connect('clicked()', self.onLoadMummy2)
-    # self.ui.viewButtonS.connect("clicked()", self.onViewSClicked)
-    # self.ui.viewButtonI.connect("clicked()", self.onViewIClicked)
-    # self.ui.viewButtonA.connect("clicked()", self.onViewAClicked)
-    # self.ui.viewButtonP.connect("clicked()", self.onViewPClicked)
-    # self.ui.viewButtonL.connect("clicked()", self.onViewLClicked)
-    # self.ui.viewButtonR.connect("clicked()", self.onViewRClicked)
-    self.ui.volumeRenderingAButton.clicked.connect( lambda: self.logic.activatePreset(MummyInterfacePresets.OUTSIDE) )
-    self.ui.volumeRenderingBButton.clicked.connect( lambda: self.logic.activatePreset(MummyInterfacePresets.INSIDE) )
+    self.ui.mummyButton1.clicked.connect(lambda: self.onLoadMummy(MummyInterfaceDataset.MUMMY1))
+    self.ui.mummyButton2.clicked.connect(lambda: self.onLoadMummy(MummyInterfaceDataset.MUMMY2))
+    self.ui.mummyButton3.clicked.connect(lambda: self.onLoadMummy(MummyInterfaceDataset.MUMMY3))
+    self.ui.viewButtonS.toggled.connect(lambda: self.onViewClicked(self.ui.viewButtonS))
+    self.ui.viewButtonI.toggled.connect(lambda: self.onViewClicked(self.ui.viewButtonI))
+    self.ui.viewButtonA.toggled.connect(lambda: self.onViewClicked(self.ui.viewButtonA))
+    self.ui.viewButtonP.toggled.connect(lambda: self.onViewClicked(self.ui.viewButtonP))
+    self.ui.viewButtonL.toggled.connect(lambda: self.onViewClicked(self.ui.viewButtonL))
+    self.ui.viewButtonR.toggled.connect(lambda: self.onViewClicked(self.ui.viewButtonR))
+    self.ui.volumeRenderingAButton.clicked.connect(lambda: self.logic.activatePreset(MummyInterfacePresets.OUTSIDE))
+    self.ui.volumeRenderingBButton.clicked.connect(lambda: self.logic.activatePreset(MummyInterfacePresets.INSIDE))
+    self.ui.vrActivationButton.clicked.connect(lambda: self.onSwitchVirtualRealityActivation())
+
+  def onViewClicked(self, viewbutton):
+    if viewbutton.text == "Superior":
+      self.logic.setViewAxis(MummyInterfaceViews.SUPERIOR)
+    if viewbutton.text == "Inferior":
+      self.logic.setViewAxis(MummyInterfaceViews.INFERIOR)
+    if viewbutton.text == "Frontal":
+      self.logic.setViewAxis(MummyInterfaceViews.ANTERIOR)
+    if viewbutton.text == "Trasera":
+      self.logic.setViewAxis(MummyInterfaceViews.POSTERIOR)
+    if viewbutton.text == "Izquierda":
+      self.logic.setViewAxis(MummyInterfaceViews.LEFT)
+    if viewbutton.text == "Derecha":
+      self.logic.setViewAxis(MummyInterfaceViews.RIGHT)
+
+  def onLoadMummy(self, mummyDataset):
+    vrActivated = self.logic.vrEnabled
+    if (vrActivated):
+      self.logic.deactivateVirtualReality()
+
+    self.logic.loadMummy(mummyDataset)
+    self.setup3DView(slicer.app.layoutManager())
+    description = self.logic.loadMummyDescription(mummyDataset)
+    self.ui.explanatoryText.setPlainText(description)
+
+    if (vrActivated):
+      self.logic.activateVirtualReality()
 
   # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
-    self.ui.mummyButton1.disconnect('clicked()', self.logic.onLoadMummy1)
-    # self.ui.mummyButton2.disconnect('clicked()', self.onLoadMummy2)
-    # self.ui.viewButtonS.disconnect("clicked()", self.onViewSClicked)
-    # self.ui.viewButtonI.disconnect("clicked()", self.onViewIClicked)
-    # self.ui.viewButtonA.disconnect("clicked()", self.onViewAClicked)
-    # self.ui.viewButtonP.disconnect("clicked()", self.onViewPClicked)
-    # self.ui.viewButtonL.disconnect("clicked()", self.onViewLClicked)
-    # self.ui.viewButtonR.disconnect("clicked()", self.onViewRClicked)
+    self.ui.mummyButton1.clicked.disconnect(self.onLoadMummy())
+    self.ui.mummyButton2.clicked.disconnect(self.onLoadMummy())
+    self.ui.mummyButton3.clicked.disconnect(self.onLoadMummy())
+    self.ui.viewButtonS.toggled.disconnect(lambda: self.onViewClicked())
+    self.ui.viewButtonI.toggled.disconnect(lambda: self.onViewClicked())
+    self.ui.viewButtonA.toggled.disconnect(lambda: self.onViewClicked())
+    self.ui.viewButtonP.toggled.disconnect(lambda: self.onViewClicked())
+    self.ui.viewButtonL.toggled.disconnect(lambda: self.onViewClicked())
+    self.ui.viewButtonR.toggled.disconnect(lambda: self.onViewClicked())
+    self.ui.volumeRenderingAButton.clicked.disconnect(lambda: self.logic.activatePreset())
+    self.ui.volumeRenderingBButton.clicked.disconnect(lambda: self.logic.activatePreset())
+    self.ui.vrActivationButton.clicked.disconnect(lambda: self.onSwitchVirtualRealityActivation())
     
-
-
-  def launchSlicelet(self):
-    mainFrame = SliceletMainFrame()
-
-    #iconPath = os.path.join(os.path.dirname(slicer.modules.mummyinterface.path), 'Resources/Icons', self.moduleName+'.png')
-    #mainFrame.windowIcon = qt.QIcon(iconPath)
-    mainFrame.connect('destroyed()', self.onSliceletClosed)
-
-    slicelet = MummyMuseamSlicelet(mainFrame)
-    mainFrame.setSlicelet(slicelet)
-
-    # Make the slicelet reachable from the Slicer python interactor for testing
-    slicer.MummyMuseamSliceletInstance = slicelet
-
-    return slicelet
-
-  def onSliceletClosed(self):
-    logging.debug('Slicelet closed')
-
+  def onSwitchVirtualRealityActivation(self):
+    if (self.logic.vrEnabled):
+      self.logic.deactivateVirtualReality()
+      self.ui.vrActivationButton.setText("Activar RV")
+      self.ui.vrResetButton.setEnabled(False)
+    else:
+      self.logic.activateVirtualReality()
+      self.ui.vrActivationButton.setText("Desactivar RV")
+      self.ui.vrResetButton.setEnabled(True)
+      slicer.modules.virtualreality.viewWidget().updateViewFromReferenceViewCamera()
 
 class MummyInterfaceTest(ScriptedLoadableModuleTest):
   """
@@ -160,54 +182,46 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
   """
 
   def __init__(self):
-    self.currentMummyName = ""
+    self.currentMummyDataset = None
+    self.volumeRendDisplayNode = None
+    self.vrEnabled = False
+    self.threeDView = slicer.app.layoutManager().threeDWidget(0).threeDView()
     self.volRenLogic = slicer.modules.volumerendering.logic()
+    self.vrLogic = slicer.modules.virtualreality.logic()
     self.setupCustomPreset()
+
 
     # Set the Default rendering method. They can be:
     #    - vtkMRMLCPURayCastVolumeRenderingDisplayNode (combobox: "VTK CPU Ray Casting" )
     #    - vtkMRMLGPURayCastVolumeRenderingDisplayNode (combobox: "VTK GPU Ray Casting" )
     #    - vtkMRMLMultiVolumeRenderingDisplayNode (combobox: "VTK Multi-Volume" )
     self.volRenLogic.SetDefaultRenderingMethod("vtkMRMLGPURayCastVolumeRenderingDisplayNode")
-
-  def onLoadMummy1(self):
-    logging.debug('Slicelet.onLoadMummy1()')
-
-    mummyName = 'Mummy1'
-    dataFilename = 'Mummy1.nrrd'
-    if mummyName == self.currentMummyName:  # Avoid unnecesary load of the current mummy
-      return
-
-    self.onLoadMummyX(dataFilename, mummyName)
-
-  def onLoadMummyX(self, dataFilename, mummyName):
-    logging.debug('Slicelet.onLoadMummyX()')
+    
+  def loadMummy(self, mummyDataset):
+    logging.debug('Slicelet.onLoadMummy()')
 
     # clean all generated node in mrml
-    # slicer.mrmlScene.Clear(0)
-    # self.setup3DView()
-    self.currentMummyName = ''
-    self.currentExplanation = ''
+    slicer.mrmlScene.Clear(0)
+    #self.setup3DView()
+    self.currentMummyDataset = mummyDataset
 
     moduleDir = os.path.dirname(__file__)
-    volumenPath = os.path.join(moduleDir, 'Resources', 'Data', dataFilename)
+    volumenPath = os.path.join(moduleDir, 'Resources', 'Data', mummyDataset["dataFilename"])
     loadedVolumeNode = slicer.util.loadVolume(volumenPath)
 
     if loadedVolumeNode:
-      volumeNode = slicer.util.getNode(mummyName)
+      volumeNode = slicer.util.getNode(mummyDataset["name"])
       if volumeNode:
-        self.currentMummyName = mummyName
+        self.currentMummyDataset = mummyDataset
         # Create all nodes and associated with VolumeNode
-        displayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumeNode)
-        # Se tuo the outside preset
-        # self.onOutsidePreset()
-        displayNode.SetVisibility(True)
-        # self.loadMummyExplanation(mummyName)
-        # self.showMummyExplanation(mummyName)
+        self.volumeRendDisplayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumeNode)
+        # Setup the outside preset
+        self.activatePreset(MummyInterfacePresets.OUTSIDE)
+        self.volumeRendDisplayNode.SetVisibility(True)
       else:
-        logging.debug('Slicelet.onLoadMummyX(): No found the mummy node' + mummyName)
+        logging.debug('Slicelet.onLoadMummyX(): No found the mummy node' + mummyDataset["name"])
     else:
-        logging.debug('Slicelet.onLoadMummyX(): No load the mummy' + mummyName)
+        logging.debug('Slicelet.onLoadMummyX(): No load the mummy' + mummyDataset["name"])
 
   def setupCustomPreset(self):
     moduleDir = os.path.dirname(__file__)
@@ -228,10 +242,10 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
       self.volRenLogic.AddPreset(node)
 
   def activatePreset(self, PresetName):
-    if self.currentMummyName == '':
+    if self.currentMummyDataset == None:
       return
     
-    volumeNode = slicer.util.getNode(self.currentMummyName)
+    volumeNode = slicer.util.getNode(self.currentMummyDataset['name'])
     
     if volumeNode:
       # Get the (Volumen Rendering) display node associated with the volume node
@@ -240,9 +254,60 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
       displayNode.GetVolumePropertyNode().Copy(self.volRenLogic.GetPresetByName(PresetName))
     else:
       logging.debug('Slicelet.activatePreset(): No found the mummy node' + self.currentMummyName)
+
+  def setDefaultBackgroundColor(self, viewNode):
+    bg_top = 0.05, 0.05, 0.05
+    bg_btm = 0.36, 0.25, 0.2
+    viewNode.SetBackgroundColor(bg_top)
+    viewNode.SetBackgroundColor2(bg_btm)
+
+  def activateVirtualReality(self):
+    if (self.vrEnabled):
+      return
+    self.vrLogic.SetVirtualRealityConnected(True)
+    vrViewNode = self.vrLogic.GetVirtualRealityViewNode()
+    vrViewNode.SetLighthouseModelsVisible(False)
+    self.volumeRendDisplayNode.AddViewNodeID(vrViewNode.GetID())
+    self.setDefaultBackgroundColor(vrViewNode)
+    self.vrLogic.SetVirtualRealityActive(True)
+    self.vrEnabled = True
+
+  def deactivateVirtualReality(self):
+    if (not self.vrEnabled):
+      return
+    self.vrLogic.SetVirtualRealityConnected(False)
+    self.vrLogic.SetVirtualRealityActive(False)
+    self.vrEnabled = False
   
+  def loadMummyDescription(self, mummyDataset):
+    moduleDir = os.path.dirname(__file__)
+    descriptionPath = os.path.join(moduleDir, 'Resources', 'Data', mummyDataset["descriptionFilename"])
 
+    descriptionFile = open(descriptionPath, "r")
+    if (descriptionFile.mode == 'r'):
+      description = descriptionFile.read()
+    descriptionFile.close()
+    return description
 
+  def rotate(self, axis, degree):
+    print("TODO")
+
+  def setViewAxis(self, viewAxis):
+    # Set a VTK predefined view axis
+    self.threeDView.resetCamera()
+    self.threeDView.rotateToViewAxis(viewAxis)
+
+    # Set the attitude customized to the presentation of the mummies
+    if (viewAxis == MummyInterfaceViews.LEFT):
+      for step in range(18):
+        self.threeDView.roll()
+    if (viewAxis == MummyInterfaceViews.RIGHT):
+      for step in range(54):
+        self.threeDView.roll()
+    if (viewAxis == MummyInterfaceViews.SUPERIOR):
+      for step in range(36):
+        self.threeDView.roll()
+    self.threeDView.resetFocalPoint()
 
   ###############
  ## To Remove ##
@@ -273,9 +338,6 @@ class SliceletMainFrame(qt.QDialog):
 #
 
 class MummyMuseamSlicelet():
-  viewAxisIndex = {'L-axis' : 0, 'R-axis' : 1,  \
-                   'P-axis' : 2, 'A-axis' : 3,  \
-                   'I-axis' : 4, 'S-axis' : 5}
 
   def __init__(self, FrameParent):
 
@@ -284,6 +346,8 @@ class MummyMuseamSlicelet():
    
     self.frameParent = FrameParent
     self.frameParent.setLayout(qt.QHBoxLayout())
+
+    self.logic = MummyInterfaceLogic()
 
     self.layout = self.frameParent.layout()
     self.layout.setMargin(0)
@@ -365,6 +429,7 @@ class MummyMuseamSlicelet():
     self.ui.volumeRenderingAButton.connect("clicked()", self.onOutsidePreset)
     self.ui.volumeRenderingBButton.connect("clicked()", self.onInsidePreset)
 
+
   def setup3DView(self):
     bg_top = 0.05, 0.05, 0.05
     bg_btm = 0.36, 0.25, 0.2
@@ -410,7 +475,6 @@ class MummyMuseamSlicelet():
     moduleDir = os.path.dirname(__file__)
     volumenPath = os.path.join(moduleDir, 'Resources', 'Data', dataFilename)
     loadedVolumeNode = slicer.util.loadVolume(volumenPath)
-    print("Llegue")
 
     if loadedVolumeNode:
       volumeNode = slicer.util.getNode(mummyName)
@@ -443,41 +507,6 @@ class MummyMuseamSlicelet():
   def showMummyExplanation(self, mummyName):
     self.ui.explanatoryText.setReadOnly(1)
     self.ui.explanatoryText.setPlainText(self.currentExplanation)
-
-  def setViewAxis(self, viewAxis):
-    # Set a VTK predefined view axis
-    self.threeDView.resetCamera()
-    self.threeDView.rotateToViewAxis(self.viewAxisIndex[viewAxis])
-
-    # Set the attitude customized to the presentation of the mummies
-    if (viewAxis == 'L-axis'):
-      for step in range(18):
-        self.threeDView.roll()
-    if (viewAxis == 'R-axis'):
-      for step in range(54):
-        self.threeDView.roll()
-    if (viewAxis == 'S-axis'):
-      for step in range(36):
-        self.threeDView.roll()
-    self.threeDView.resetFocalPoint()
-
-  def onViewLClicked(self):
-    self.setViewAxis('L-axis')
-
-  def onViewRClicked(self):
-    self.setViewAxis('R-axis')
-
-  def onViewPClicked(self):
-    self.setViewAxis('P-axis')
-
-  def onViewAClicked(self):
-    self.setViewAxis('A-axis')
-
-  def onViewIClicked(self):
-    self.setViewAxis('I-axis')
-
-  def onViewSClicked(self):
-    self.setViewAxis('S-axis')
 
   def setupCustomPreset(self):
     moduleDir = os.path.dirname(__file__)
@@ -521,6 +550,7 @@ class MummyMuseamSlicelet():
 
   def hidePanel(self):
     self.uiWidget.hide()
+
 
 #
 # Main

@@ -11,8 +11,10 @@ set(MODULE_PYTHON_RESOURCES
   Resources/UI/${MODULE_NAME}.ui
   Resources/Data/Mummy1.nrrd
   Resources/Data/Mummy2.nrrd
+  Resources/Data/Mummy3.nrrd
   Resources/Data/Mummy1.txt
   Resources/Data/Mummy2.txt
+  Resources/Data/Mummy3.txt
   Resources/VolRen/MyPresets.mrml
   )
 
