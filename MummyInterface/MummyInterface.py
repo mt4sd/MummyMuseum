@@ -150,14 +150,15 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
     self.ui.vrActivationButton.clicked.disconnect(lambda: self.onSwitchVirtualRealityActivation())
     
   def onSwitchVirtualRealityActivation(self):
-    self.logic.switchVirtualReality()
-    if (slicer.modules.virtualreality.logic().GetVirtualRealityActive()):
-      self.ui.vrActivationButton.setText("Desactivar RV")
-      self.ui.vrResetButton.setEnabled(True)
-    else:
+    if (self.logic.vrEnabled):
+      self.logic.deactivateVirtualReality()
       self.ui.vrActivationButton.setText("Activar RV")
       self.ui.vrResetButton.setEnabled(False)
-
+    else:
+      self.logic.activateVirtualReality()
+      self.ui.vrActivationButton.setText("Desactivar RV")
+      self.ui.vrResetButton.setEnabled(True)
+      slicer.modules.virtualreality.viewWidget().updateViewFromReferenceViewCamera()
 
 class MummyInterfaceTest(ScriptedLoadableModuleTest):
   """
@@ -193,6 +194,7 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
 
   def __init__(self):
     self.currentMummyDataset = None
+    self.vrEnabled = False
     self.volRenLogic = slicer.modules.volumerendering.logic()
     self.vrLogic = slicer.modules.virtualreality.logic()
     self.setupCustomPreset()
@@ -267,21 +269,28 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     else:
       logging.debug('Slicelet.activatePreset(): No found the mummy node' + self.currentMummyName)
 
+  def setBackgroundColor(self, viewNode):
+    bg_top = 0.05, 0.05, 0.05
+    bg_btm = 0.36, 0.25, 0.2
+    viewNode.SetBackgroundColor(bg_top)
+    viewNode.SetBackgroundColor2(bg_btm)
+
   def activateVirtualReality(self):
-    # Anyadir bacgorund color y view en el volume rendering
-    print("TODO")
+    if (self.vrEnabled):
+      return
+    self.vrLogic.SetVirtualRealityConnected(True)
+    self.vrLogic.SetVirtualRealityActive(True)
+    vrViewNode = self.vrLogic.GetVirtualRealityViewNode()
+    self.volumeRendDisplayNode.AddViewNodeID(vrViewNode.GetID())
+    self.setBackgroundColor(vrViewNode)
+    self.vrEnabled = True
 
   def deactivateVirtualReality(self):
-    print("TODO")
-
-  def switchVirtualReality(self):
-    vrLogic = slicer.modules.virtualreality.logic()
-    if (vrLogic.GetVirtualRealityActive()):
-      vrLogic.SetVirtualRealityActive(False)
-      vrLogic.SetVirtualRealityConnected(False)
-    else:
-      vrLogic.SetVirtualRealityConnected(True)
-      vrLogic.SetVirtualRealityActive(True)
+    if (not self.vrEnabled):
+      return
+    self.vrLogic.SetVirtualRealityConnected(False)
+    self.vrLogic.SetVirtualRealityActive(False)
+    self.vrEnabled = False
   
   def loadMummyDescription(self, mummyDataset):
     moduleDir = os.path.dirname(__file__)
