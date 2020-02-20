@@ -115,10 +115,17 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
       self.logic.setViewAxis('R-axis')
 
   def onLoadMummy(self, mummyDataset):
+    vrActivated = self.logic.vrEnabled
+    if (vrActivated):
+      self.logic.deactivateVirtualReality()
+
     self.logic.loadMummy(mummyDataset)
     self.setup3DView(slicer.app.layoutManager())
     description = self.logic.loadMummyDescription(mummyDataset)
     self.ui.explanatoryText.setPlainText(description)
+
+    if (vrActivated):
+      self.logic.activateVirtualReality()
 
   # Disconnect all connections made to the slicelet to enable the garbage collector to destruct the slicelet object on quit
   def disconnect(self):
