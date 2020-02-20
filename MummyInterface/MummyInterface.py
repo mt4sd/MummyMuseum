@@ -24,8 +24,8 @@ class MummyInterface(ScriptedLoadableModule):
     ScriptedLoadableModule.__init__(self, parent)
     self.parent.title = "MummyInterface" # TODO make this more human readable by adding spaces
     self.parent.categories = ["Slicelet"]
-    self.parent.dependencies = ["VolumeRendering"]
-    self.parent.contributors = ["Nayra, Guillermo, Carlos Luque"] # replace with "Firstname Lastname (Organization)"
+    self.parent.dependencies = ["VolumeRendering", "VirtualReality"]
+    self.parent.contributors = ["Nayra, Guillermo, Carlos Luque, Abián Hernández"] # replace with "Firstname Lastname (Organization)"
     self.parent.helpText = "Slicelet for Mummy Museam"
     self.parent.acknowledgementText = "This file was originally developed by Nayra, Guillermo, Carlos Luque " 
 
@@ -111,7 +111,9 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
     self.ui.vrActivationButton.clicked.disconnect(lambda: self.onSwitchVirtualRealityActivation())
     
 
-
+  ###############
+  ## To remove ##
+  ###############
   def launchSlicelet(self):
     mainFrame = SliceletMainFrame()
 
@@ -127,6 +129,9 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
 
     return slicelet
 
+  ###############
+  ## To remove ##
+  ###############
   def onSliceletClosed(self):
     logging.debug('Slicelet closed')
 
@@ -176,6 +181,8 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
   def __init__(self):
     self.currentMummyName = ""
     self.volRenLogic = slicer.modules.volumerendering.logic()
+    self.vrLogic = slicer.modules.virtualreality.logic()
+    
     self.setupCustomPreset()
 
     # Set the Default rendering method. They can be:
@@ -183,6 +190,10 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     #    - vtkMRMLGPURayCastVolumeRenderingDisplayNode (combobox: "VTK GPU Ray Casting" )
     #    - vtkMRMLMultiVolumeRenderingDisplayNode (combobox: "VTK Multi-Volume" )
     self.volRenLogic.SetDefaultRenderingMethod("vtkMRMLGPURayCastVolumeRenderingDisplayNode")
+    
+    self.volumeRendDisplayNode = None
+    
+
 
   def onLoadMummy1(self):
     logging.debug('Slicelet.onLoadMummy1()')
@@ -214,7 +225,7 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
         # Create all nodes and associated with VolumeNode
         displayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumeNode)
         # Se tuo the outside preset
-        # self.onOutsidePreset()
+        # Ej: self.activatePreset(MummyInterfacePresets.INSIDE)
         displayNode.SetVisibility(True)
         # self.loadMummyExplanation(mummyName)
         # self.showMummyExplanation(mummyName)
@@ -255,6 +266,13 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     else:
       logging.debug('Slicelet.activatePreset(): No found the mummy node' + self.currentMummyName)
 
+  def activateVirtualReality(self):
+    # Añadir bacgorund color y view en el volume rendering
+    print("TODO")
+
+  def deactivateVirtualReality(self):
+    print("TODO")
+
   def switchVirtualReality(self):
     vrLogic = slicer.modules.virtualreality.logic()
     if (vrLogic.GetVirtualRealityActive()):
@@ -264,6 +282,12 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
       vrLogic.SetVirtualRealityConnected(True)
       vrLogic.SetVirtualRealityActive(True)
   
+  def loadMummyDescription(self, filename):
+    print("TODO") 
+    # return "texto"
+
+  def rotate(self, axis, degree):
+    print("TODO")
 
 
   ###############
