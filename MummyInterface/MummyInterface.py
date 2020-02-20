@@ -74,18 +74,9 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
     # Load widget from .ui file (created by Qt Designer)
     self.ui = slicer.util.loadUI(uiPath)
     self.layout.addWidget(self.ui)
-    
-    # Show slicelet button
-    # showSliceletButton = qt.QPushButton("Show slicelet")
-    # showSliceletButton.toolTip = "Launch the slicelet"
-    # self.layout.addWidget(qt.QLabel(' '))
-    # self.layout.addWidget(showSliceletButton)
-    # showSliceletButton.connect('clicked()', self.launchSlicelet)
 
     self.setupConnections()
-    
-    # Add vertical spacer
-    # self.layout.addStretch(1)
+
 
   def setup3DView(self, layoutManager):
     viewNode = layoutManager.threeDWidget(0).mrmlViewNode()
@@ -189,6 +180,7 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
 
   def __init__(self):
     self.currentMummyDataset = None
+    self.volumeRendDisplayNode = None
     self.vrEnabled = False
     self.volRenLogic = slicer.modules.volumerendering.logic()
     self.vrLogic = slicer.modules.virtualreality.logic()
@@ -200,8 +192,6 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     #    - vtkMRMLGPURayCastVolumeRenderingDisplayNode (combobox: "VTK GPU Ray Casting" )
     #    - vtkMRMLMultiVolumeRenderingDisplayNode (combobox: "VTK Multi-Volume" )
     self.volRenLogic.SetDefaultRenderingMethod("vtkMRMLGPURayCastVolumeRenderingDisplayNode")
-    
-    self.volumeRendDisplayNode = None
     
   def loadMummy(self, mummyDataset):
     logging.debug('Slicelet.onLoadMummy()')
@@ -222,10 +212,8 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
         # Create all nodes and associated with VolumeNode
         self.volumeRendDisplayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumeNode)
         # Setup the outside preset
-        # self.activatePreset(MummyInterfacePresets.OUTSIDE)
+        self.activatePreset(MummyInterfacePresets.OUTSIDE)
         self.volumeRendDisplayNode.SetVisibility(True)
-        # self.loadMummyExplanation(mummyName)
-        # self.showMummyExplanation(mummyName)
       else:
         logging.debug('Slicelet.onLoadMummyX(): No found the mummy node' + mummyDataset["name"])
     else:
@@ -273,10 +261,11 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     if (self.vrEnabled):
       return
     self.vrLogic.SetVirtualRealityConnected(True)
-    self.vrLogic.SetVirtualRealityActive(True)
     vrViewNode = self.vrLogic.GetVirtualRealityViewNode()
+    vrViewNode.SetLighthouseModelsVisible(False)
     self.volumeRendDisplayNode.AddViewNodeID(vrViewNode.GetID())
     self.setDefaultBackgroundColor(vrViewNode)
+    self.vrLogic.SetVirtualRealityActive(True)
     self.vrEnabled = True
 
   def deactivateVirtualReality(self):
