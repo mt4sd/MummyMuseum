@@ -12,12 +12,12 @@ class MummyInterfacePresets():
   OUTSIDE = "OutsidePreset"
 
 class MummyInterfaceViews():
-  RIGHT = "RightView"
-  LEFT = "LeftView"
-  ANTERIOR = "AnteriorView"
-  POSTERIOR = "PosteriorView"
-  SUPERIOR = "SuperiorView"
-  INFERIOR = "InferiorView"
+  LEFT = 0
+  RIGHT = 1
+  POSTERIOR = 2
+  ANTERIOR = 3
+  INFERIOR = 4
+  SUPERIOR = 5
   
 class MummyInterfaceDataset():
   MUMMY1 = {"name": "Mummy1", "dataFilename": "Mummy1.nrrd", "descriptionFilename" : "Mummy1.txt"}
@@ -51,10 +51,6 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
   """Uses ScriptedLoadableModuleWidget base class, available at:
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
   """
-
-  viewAxisIndex = {'L-axis' : 0, 'R-axis' : 1,  \
-                   'P-axis' : 2, 'A-axis' : 3,  \
-                   'I-axis' : 4, 'S-axis' : 5}
 
   def __init__(self, parent):
     ScriptedLoadableModuleWidget.__init__(self, parent)
@@ -102,17 +98,17 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
 
   def onViewClicked(self, viewbutton):
     if viewbutton.text == "Superior":
-      self.logic.setViewAxis('S-axis')
+      self.logic.setViewAxis(MummyInterfaceViews.SUPERIOR)
     if viewbutton.text == "Inferior":
-      self.logic.setViewAxis('I-axis')
+      self.logic.setViewAxis(MummyInterfaceViews.INFERIOR)
     if viewbutton.text == "Frontal":
-      self.logic.setViewAxis('A-axis')
+      self.logic.setViewAxis(MummyInterfaceViews.ANTERIOR)
     if viewbutton.text == "Trasera":
-      self.logic.setViewAxis('P-axis')
+      self.logic.setViewAxis(MummyInterfaceViews.POSTERIOR)
     if viewbutton.text == "Izquierda":
-      self.logic.setViewAxis('L-axis')
+      self.logic.setViewAxis(MummyInterfaceViews.LEFT)
     if viewbutton.text == "Derecha":
-      self.logic.setViewAxis('R-axis')
+      self.logic.setViewAxis(MummyInterfaceViews.RIGHT)
 
   def onLoadMummy(self, mummyDataset):
     self.logic.loadMummy(mummyDataset)
@@ -182,6 +178,7 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     self.currentMummyDataset = None
     self.volumeRendDisplayNode = None
     self.vrEnabled = False
+    self.threeDView = slicer.app.layoutManager().threeDWidget(0).threeDView()
     self.volRenLogic = slicer.modules.volumerendering.logic()
     self.vrLogic = slicer.modules.virtualreality.logic()
     self.setupCustomPreset()
@@ -289,23 +286,21 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     print("TODO")
 
   def setViewAxis(self, viewAxis):
-    print("TODO setViewAxis")
-    print(viewAxis)
-    # # Set a VTK predefined view axis
-    # self.threeDView.resetCamera()
-    # self.threeDView.rotateToViewAxis(self.viewAxisIndex[viewAxis])
+    # Set a VTK predefined view axis
+    self.threeDView.resetCamera()
+    self.threeDView.rotateToViewAxis(viewAxis)
 
-    # # Set the attitude customized to the presentation of the mummies
-    # if (viewAxis == 'L-axis'):
-    #   for step in range(18):
-    #     self.threeDView.roll()
-    # if (viewAxis == 'R-axis'):
-    #   for step in range(54):
-    #     self.threeDView.roll()
-    # if (viewAxis == 'S-axis'):
-    #   for step in range(36):
-    #     self.threeDView.roll()
-    # self.threeDView.resetFocalPoint()
+    # Set the attitude customized to the presentation of the mummies
+    if (viewAxis == MummyInterfaceViews.LEFT):
+      for step in range(18):
+        self.threeDView.roll()
+    if (viewAxis == MummyInterfaceViews.RIGHT):
+      for step in range(54):
+        self.threeDView.roll()
+    if (viewAxis == MummyInterfaceViews.SUPERIOR):
+      for step in range(36):
+        self.threeDView.roll()
+    self.threeDView.resetFocalPoint()
 
   ###############
  ## To Remove ##
@@ -473,7 +468,6 @@ class MummyMuseamSlicelet():
     moduleDir = os.path.dirname(__file__)
     volumenPath = os.path.join(moduleDir, 'Resources', 'Data', dataFilename)
     loadedVolumeNode = slicer.util.loadVolume(volumenPath)
-    print("Llegue")
 
     if loadedVolumeNode:
       volumeNode = slicer.util.getNode(mummyName)
