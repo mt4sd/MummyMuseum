@@ -1,2 +1,3 @@
 MummyInterface/__pycache__/*.pyc
 MummyInterface/MummyInterface.pyc
+.vscode/settings.json

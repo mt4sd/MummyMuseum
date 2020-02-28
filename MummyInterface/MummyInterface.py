@@ -59,10 +59,10 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
 
-    layoutManager = slicer.app.layoutManager()
-    layoutManager.setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUp3DView)
-    layoutManager.threeDWidget(0).threeDController().setVisible(False)
-    self.setup3DView(layoutManager)
+    # layoutManager = slicer.app.layoutManager()
+    # layoutManager.setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUp3DView)
+    # layoutManager.threeDWidget(0).threeDController().setVisible(False)
+    # self.setup3DView(layoutManager)
 
 
     moduleDir = os.path.dirname(__file__)
@@ -116,7 +116,7 @@ class MummyInterfaceWidget(ScriptedLoadableModuleWidget):
       self.logic.deactivateVirtualReality()
 
     self.logic.loadMummy(mummyDataset)
-    self.setup3DView(slicer.app.layoutManager())
+    # self.setup3DView(slicer.app.layoutManager())
     description = self.logic.loadMummyDescription(mummyDataset)
     self.ui.explanatoryText.setPlainText(description)
 
@@ -188,6 +188,7 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     self.threeDView = slicer.app.layoutManager().threeDWidget(0).threeDView()
     self.volRenLogic = slicer.modules.volumerendering.logic()
     self.vrLogic = slicer.modules.virtualreality.logic()
+    
     self.setupCustomPreset()
 
 
@@ -199,6 +200,10 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     
   def loadMummy(self, mummyDataset):
     logging.debug('Slicelet.onLoadMummy()')
+
+    # if (self.currentMummyDataset)
+    #   volumeNode = slicer.util.getNode(mummyDataset["name"])
+    #   slicer.mrmlScene.RemoveNode(volumeNode)
 
     # clean all generated node in mrml
     slicer.mrmlScene.Clear(0)
@@ -213,9 +218,8 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
       volumeNode = slicer.util.getNode(mummyDataset["name"])
       if volumeNode:
         self.currentMummyDataset = mummyDataset
-        # Create all nodes and associated with VolumeNode
+        displayNode2 = volRenLogic.CreateVolumeRenderingDisplayNode()
         self.volumeRendDisplayNode = self.volRenLogic.CreateDefaultVolumeRenderingNodes(volumeNode)
-        # Setup the outside preset
         self.activatePreset(MummyInterfacePresets.OUTSIDE)
         self.volumeRendDisplayNode.SetVisibility(True)
       else:
@@ -223,23 +227,24 @@ class MummyInterfaceLogic(ScriptedLoadableModuleLogic):
     else:
         logging.debug('Slicelet.onLoadMummyX(): No load the mummy' + mummyDataset["name"])
 
+  ## Register custom volume rendering presets
+  #  Reference: https://www.slicer.org/wiki/Documentation/Nightly/Modules/VolumeRendering#How_to_register_custom_volume_rendering_presets.
   def setupCustomPreset(self):
     moduleDir = os.path.dirname(__file__)
     presetsScenePath = os.path.join(moduleDir, 'Resources', 'VolRen', 'MyPresets.mrml')
 
-    # Read presets scene
     mrmlScene = slicer.vtkMRMLScene()
     vrPropNode = slicer.vtkMRMLVolumePropertyNode()
     mrmlScene.RegisterNodeClass(vrPropNode)
     mrmlScene.SetURL(presetsScenePath)
     mrmlScene.Connect()
 
-    # Add presets to volume rendering logic
     vrNodes = mrmlScene.GetNodesByClass("vtkMRMLVolumePropertyNode")
     vrNodes.UnRegister(None)
     for itemNum in range(vrNodes.GetNumberOfItems()):
       node = vrNodes.GetItemAsObject(itemNum)
       self.volRenLogic.AddPreset(node)
+
 
   def activatePreset(self, PresetName):
     if self.currentMummyDataset == None:
